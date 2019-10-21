@@ -1,19 +1,28 @@
 os: Visual Studio 2017
 version: 2019.1.{build}
 clone_depth: 5
+
 install:
 - set REPODIR=%CD%
-- set /P RDM_VERSION=<version.txt
-- git clone -q --depth=5 --branch=%RDM_VERSION% https://github.com/uglide/RedisDesktopManager.git C:\projects\redisdesktopmanager
+- set /P RDM_TAGET_BRANCH= < clone-branch.txt
+- git clone -q --depth=5 --branch=%RDM_TAGET_BRANCH% https://github.com/uglide/RedisDesktopManager.git C:\projects\redisdesktopmanager
 - set SRCDIR=C:\projects\RedisDesktopManager
 - set QTDIR=C:\Qt\5.9\msvc2017_64
 - set PATH=%QTDIR%\bin;%PATH%
 - cd %SRCDIR%
-- git describe --abbrev=0 --tags
-- git rev-parse --short HEAD
 - git submodule update --init --recursive
 - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
 - qmake -v
+
+before_build:
+- cd %SRCDIR%
+- git rev-parse --short=8 HEAD > hash.txt
+- set /P RDM_HASH= < hash.txt
+- grep RDM_VERSION src/rdm.pro | grep -oh "[0-9]\\+.[0-9]\\+.[0-9]\\+" > version.txt
+- set /P RDM_VERSION= < version.txt
+- echo %RDM_VERSION%-%RDM_HASH%> release-tag.txt
+- set /P RELEASE_TAG= < release-tag.txt
+- echo BUILD FOR %RELEASE_TAG%
 
 build_script:
 - cd %SRCDIR%
@@ -43,19 +52,23 @@ build_script:
 - del /Q  .\imageformats\qwebp.dll
 - C:\Python37\python.exe -m pip install -t . -r %SRCDIR%/src/py/requirements.txt
 - cd %SRCDIR%
-- call "C:\\Program Files (x86)\\NSIS\\makensis.exe" /V1 /DVERSION=%RDM_VERSION%.0.0 ./build/windows/installer/installer.nsi
+- call "C:\\Program Files (x86)\\NSIS\\makensis.exe" /V1 /DVERSION=%RDM_VERSION%.0 ./build/windows/installer/installer.nsi
+- mv .\build\windows\installer\redis-desktop-manager-%RDM_VERSION%.0.exe .\build\windows\installer\redis-desktop-manager-%RELEASE_TAG%.exe
 - cd %APPVEYOR_BUILD_FOLDER%
-- 7z.exe a redis-desktop-manager-%RDM_VERSION%.zip  %SRCDIR%/build/windows/installer/redis-desktop-manager-%RDM_VERSION%.0.0.exe
+- 7z.exe a "redis-desktop-manager-%RELEASE_TAG%.zip" "%SRCDIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
+
 artifacts:
-- path: redis-desktop-manager-$(RDM_VERSION).zip
+- path: redis-desktop-manager-$(RELEASE_TAG).zip
+
 deploy:
-  release: $(RDM_VERSION)
-  description: "[Thank you RedisDesktopManager](https://github.com/uglide/RedisDesktopManager/releases/tag/$(RDM_VERSION))"
+  release: $(RELEASE_TAG)
+  description: "Thank you [RedisDesktopManager](https://github.com/uglide/RedisDesktopManager)!"
   provider: GitHub
   auth_token:
     secure: s9uw2NujMMtddlR5nLNRnwiTHhHLhuUsPL3w4PLbucCNBS9EQKBXBY4JfuMcUCZL # your encrypted token from GitHub
-  artifact: redis-desktop-manager-$(RDM_VERSION).zip   # upload all NuGet packages to release assets
+  artifact: redis-desktop-manager-$(RELEASE_TAG).zip   # upload all NuGet packages to release assets
   draft: false
-  prerelease: false
+  prerelease: true
+  force_update: true
   on:
     branch: master                 # release from master branch only
