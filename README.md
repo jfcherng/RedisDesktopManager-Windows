@@ -1,20 +1,27 @@
-## RedisDesktopManager-Windows
+# RedisDesktopManager-Windows
 
-RedisDesktopManager Windows版本
+如果在條件允許的情況下，衷心地希望購買[訂閱](https://redisdesktop.com/pricing)支持作者，
+在這裡也非常感謝作者開源 [RedisDesktopManager](https://github.com/uglide/RedisDesktopManager) 。
 
-为了方便国内技术人员不方便以美元购买[订阅](https://redisdesktop.com/pricing)才开设的本仓库。如果在条件允许的情况下，衷心的希望购买[订阅](https://redisdesktop.com/pricing)支持下作者，在这里也非常感谢作者开源[RedisDesktopManager](https://github.com/uglide/RedisDesktopManager)。
 
-目前国内可以通过`微信`支付购买[redisdesktop.com](https://redisdesktop.com/)上的订阅，每次的购买都会有助于作者[uglide](https://github.com/uglide)推动RDM向前发展。
+## Fork 說明
 
-## 安装使用
+此倉庫為 [lework/RedisDesktopManager-Windows](https://github.com/lework/RedisDesktopManager-Windows)
+的分支，只是修改為每次 commit 後會自動拉取最新版本的 RedisDesktopManager 編譯並發布。
 
-通过本仓库的 [releases](https://github.com/lework/RedisDesktopManager-Windows/releases) 页面下载`redis-desktop-manager-x.zip`文件， 解压后运行其中 `redis-desktop-manager-x.exe`文件, 就可以安装 RedisDesktopManager 。 目前只支持x64平台。
+感謝由 [@lework](https://github.com/lework) 所編寫的 `appveyor.yml` 。
 
-## Faq
 
-1. 程序启动出现 0xc000007b错误。
+## 安裝使用
 
-    下载运行[vc_redist.x64](https://aka.ms/vs/15/release/vc_redist.x64.exe)点击修复选项。
-2. 由于找不到python37.dll。
+RedisDesktopManager 只支援 x64 平台。
 
-    下载仓库中的[python37-deps.zip](https://github.com/lework/RedisDesktopManager-Windows/blob/master/python37-deps.zip?raw=true),解压到RedisDesktopManager安装目录中。
+在本倉庫的 [Releases](https://github.com/jfcherng/RedisDesktopManager-Windows/releases)
+頁面下載 `redis-desktop-manager-XXX.zip` ，解壓後安裝 `redis-desktop-manager-XXX.exe` 即可。
+
+
+## FAQ
+
+1. 啟動出現 `0xc000007b` 錯誤
+
+   下載安裝 [vc_redist.x64.exe](https://aka.ms/vs/15/release/vc_redist.x64.exe) 點擊修復選項。
