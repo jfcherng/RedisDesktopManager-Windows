@@ -3,19 +3,23 @@ version: 2019.1.{build}
 clone_depth: 5
 
 install:
-- set REPODIR=%CD%
+- set REPO_DIR=%CD%
+- set SRC_DIR=C:\projects\RDM
+- set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
+- set QT_DIR=C:\Qt\5.9\msvc2017_64
+- set PATH=%QT_DIR%\bin;%PATH%
+
 - set /P RDM_TARGET_BRANCH= < clone-branch.txt
-- git clone -q --depth=5 --branch=%RDM_TARGET_BRANCH% https://github.com/uglide/RedisDesktopManager.git C:\projects\redisdesktopmanager
-- set SRCDIR=C:\projects\RedisDesktopManager
-- set QTDIR=C:\Qt\5.9\msvc2017_64
-- set PATH=%QTDIR%\bin;%PATH%
-- cd %SRCDIR%
-- git submodule update --init --recursive
+- git clone --depth=1 --recursive --branch=%RDM_TARGET_BRANCH%
+    https://github.com/uglide/RedisDesktopManager.git
+    "%SRC_DIR%"
+
+- cd %SRC_DIR%
 - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
 - qmake -v
 
 before_build:
-- cd %SRCDIR%
+- cd %SRC_DIR%
 - git rev-parse --short=8 HEAD > hash.txt
 - set /P RDM_HASH= < hash.txt
 - grep RDM_VERSION src/rdm.pro | grep -oh "[0-9]\\+.[0-9]\\+.[0-9]\\+" > version.txt
@@ -25,37 +29,84 @@ before_build:
 - echo BUILD FOR %RELEASE_TAG%
 
 build_script:
-- cd %SRCDIR%
-- cd ./3rdparty/qredisclient/
-- 7z.exe x "%REPODIR%\deps.zip"
-- del /F qredisclient.lib
-- cd %SRCDIR%
+# put deps
+- cp -rf %REPO_DIR%/deps/* %SRC_DIR%
+- sed
+    -i"" %SRC_DIR%/3rdparty/qredisclient/src/qredisclient/connection.cpp
+    -e 's@"sshtransporter.h"@"transporters/sshtransporter.h"@g'
+
+# build qsshclient
+- cd %SRC_DIR%/3rdparty
+- git clone --depth=1 --recursive https://github.com/jfcherng/qsshclient.git
+- cd qsshclient
+- qmake
+- nmake /S /NOLOGO release
+
+# build libssh2
+- cd %SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2
+- cmake
+    -G "Visual Studio 15 2017 Win64"
+    -DCRYPTO_BACKEND=WinCNG
+    -DCMAKE_BUILD_TYPE=RELEASE
+    -DBUILD_SHARED_LIBS=ON
+    -DCMAKE_INSTALL_PREFIX=./output
+    --build .
+- cmake --build . --config "Release" --target install
+- mkdir build\src\release
+- cp -f output/lib/libssh2.lib %SRC_DIR%/3rdparty/qsshclient/
+- cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
+
+# build app
+- cd %SRC_DIR%
 - python ./build/utils/set_version.py %RDM_VERSION% > ./src/version.h
-- cd %SRCDIR%/3rdparty
+- cd %SRC_DIR%/3rdparty
 - nuget install zlib-msvc14-x64 -Version 1.2.11.7795
-- cd qredisclient/3rdparty/hiredis
+- cd %SRC_DIR%/3rdparty/qredisclient/3rdparty/hiredis
 - git apply -v ../hiredis-win.patch
-- cd %SRCDIR%/src
+
+- cd %SRC_DIR%/src
 - lrelease rdm.pro
 - qmake CONFIG+=release
+    DEFINES+="SSH_SUPPORT=1"
+    LIBS+="-L%SRC_DIR%/3rdparty/qsshclient"
+    LIBS+="-lqsshclient -llibssh2"
+    INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/src"
+    INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2/output/include"
 - nmake /S /NOLOGO release
-- cd %SRCDIR%
-- copy /y .\bin\windows\release\rdm.exe .\build\windows\installer\resources\rdm.exe
-- copy /y .\3rdparty\qredisclient\botan.dll .\build\windows\installer\resources\botan.dll
-- 7z.exe x "%REPODIR%\python37-deps.zip" -o.\build\windows\installer\resources\
-- cd build/windows/installer/resources/
-- windeployqt --no-angle --no-opengl-sw --no-compiler-runtime --no-translations --release --force --qmldir %SRCDIR%/src/qml rdm.exe
-- rmdir /S /Q .\platforminputcontexts
-- rmdir /S /Q .\qmltooling
-- rmdir /S /Q .\QtGraphicalEffects
-- del /Q  .\imageformats\qtiff.dll
-- del /Q  .\imageformats\qwebp.dll
-- C:\Python37\python.exe -m pip install -t . -r %SRCDIR%/src/py/requirements.txt
-- cd %SRCDIR%
-- call "C:\\Program Files (x86)\\NSIS\\makensis.exe" /V1 /DVERSION=%RDM_VERSION%.0 ./build/windows/installer/installer.nsi
+
+- cd %SRC_DIR%
+- cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
+- cp -f 3rdparty/qredisclient/botan.dll %RESOURCE_DIR%/
+
+- cd %RESOURCE_DIR%
+- windeployqt --no-angle --no-opengl-sw --no-compiler-runtime --no-translations --release --force --qmldir %SRC_DIR%/src/qml rdm.exe
+- rm -rf
+    platforminputcontexts/
+    qmltooling/
+    QtGraphicalEffects/
+    imageformats/qtiff.dll
+    imageformats/qwebp.dll
+
+# install python deps
+- cd %RESOURCE_DIR%
+- 7z.exe x -aoa "%REPO_DIR%/python37-deps.7z" -o .
+- md Lib
+- cp -rf %SRC_DIR%/src/py Lib/site-packages
+- cd Lib/site-packages
+- C:\Python37\python.exe -m pip install -r ./requirements.txt -t .
+- C:\Python37\python.exe -m compileall -b .
+- find . -name "*.py" -type f -print0 | xargs -0 rm -f
+- find . -name __pycache__ -type d -print0 | xargs -0 rm -rf
+- rm -rf py.qrc requirements.txt *.dist-info *.egg-info
+
+# bundle installer
+- cd %SRC_DIR%
+- call "C:\Program Files (x86)\NSIS\makensis.exe" /V1 /DVERSION=%RDM_VERSION%.0 ./build/windows/installer/installer.nsi
 - mv .\build\windows\installer\redis-desktop-manager-%RDM_VERSION%.0.exe .\build\windows\installer\redis-desktop-manager-%RELEASE_TAG%.exe
+
+# create artifacts
 - cd %APPVEYOR_BUILD_FOLDER%
-- 7z.exe a "redis-desktop-manager-%RELEASE_TAG%.zip" "%SRCDIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
+- 7z.exe a "redis-desktop-manager-%RELEASE_TAG%.zip" "%SRC_DIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
 
 artifacts:
 - path: redis-desktop-manager-$(RELEASE_TAG).zip
@@ -71,4 +122,4 @@ deploy:
   prerelease: true
   force_update: true
   on:
-    branch: master                 # release from master branch only
+    branch: master # release from master branch only
