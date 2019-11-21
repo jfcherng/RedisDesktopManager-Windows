@@ -89,7 +89,7 @@ build_script:
 
 # install python deps
 - cd %RESOURCE_DIR%
-- 7z.exe x -aoa "%REPO_DIR%/python37-deps.7z" -o .
+- 7z.exe x -aoa "%REPO_DIR%/python37-deps.7z" -o.
 - md Lib
 - cp -rf %SRC_DIR%/src/py Lib/site-packages
 - cd Lib/site-packages
