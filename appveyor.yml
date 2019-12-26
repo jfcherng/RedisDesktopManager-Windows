@@ -6,8 +6,10 @@ install:
 - set REPO_DIR=%CD%
 - set SRC_DIR=C:\projects\RDM
 - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
+
+- set PY_DIR=C:\Python37-x64
 - set QT_DIR=C:\Qt\5.9\msvc2017_64
-- set PATH=%QT_DIR%\bin;%PATH%
+- set PATH=%PY_DIR%;%QT_DIR%\bin;%PATH%
 
 - set /P RDM_TARGET_BRANCH= < clone-branch.txt
 - git clone --depth=1 --recursive --branch=%RDM_TARGET_BRANCH%
@@ -16,7 +18,9 @@ install:
 
 - cd %SRC_DIR%
 - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+
 - qmake -v
+- python -VV
 
 before_build:
 - cd %SRC_DIR%
@@ -93,8 +97,8 @@ build_script:
 - md Lib
 - cp -rf %SRC_DIR%/src/py Lib/site-packages
 - cd Lib/site-packages
-- C:\Python37\python.exe -m pip install -r ./requirements.txt -t .
-- C:\Python37\python.exe -m compileall -b .
+- python -m pip install -r ./requirements.txt -t .
+- python -m compileall -b .
 - find . -name "*.py" -type f -print0 | xargs -0 rm -f
 - find . -name __pycache__ -type d -print0 | xargs -0 rm -rf
 - rm -rf py.qrc requirements.txt *.dist-info *.egg-info
