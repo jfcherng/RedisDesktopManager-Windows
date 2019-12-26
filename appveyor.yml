@@ -8,17 +8,24 @@ install:
 - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
 - set OPENSSL_DIR=C:\OpenSSL-Win64
 
+- set GITBASH_DIR=C:\Program Files\Git\usr\bin
 - set PY_DIR=C:\Python37-x64
 - set QT_DIR=C:\Qt\5.9\msvc2017_64
-- set PATH=%PY_DIR%;%QT_DIR%\bin;%PATH%
+# prefer using Linux utils such as "find"
+- set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
 
 - set /P RDM_TARGET_BRANCH= < clone-branch.txt
-- git clone --depth=1 --recursive --branch=%RDM_TARGET_BRANCH%
+- git clone
+    --depth=1
+    --recursive
+    --branch=%RDM_TARGET_BRANCH%
     https://github.com/uglide/RedisDesktopManager.git
     "%SRC_DIR%"
 
 - cd %SRC_DIR%
-- call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+- call
+    "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+    x86_amd64
 
 - qmake -v
 - python -VV
@@ -59,7 +66,10 @@ build_script:
     -DBUILD_TESTING=off
     -DCMAKE_INSTALL_PREFIX=./output
     --build .
-- cmake --build . --config "Release" --target install
+- cmake
+    --build .
+    --config "Release"
+    --target install
 - mkdir build\src\release
 - cp -f output/lib/libssh2.lib %SRC_DIR%/3rdparty/qsshclient/
 - cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
@@ -74,7 +84,8 @@ build_script:
 
 - cd %SRC_DIR%/src
 - lrelease rdm.pro
-- qmake CONFIG+=release
+- qmake
+    CONFIG+=release
     DEFINES+="SSH_SUPPORT=1"
     LIBS+="-L%SRC_DIR%/3rdparty/qsshclient"
     LIBS+="-lqsshclient -llibssh2"
@@ -86,7 +97,15 @@ build_script:
 - cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
 
 - cd %RESOURCE_DIR%
-- windeployqt --no-angle --no-opengl-sw --no-compiler-runtime --no-translations --release --force --qmldir %SRC_DIR%/src/qml rdm.exe
+- windeployqt
+    --no-angle
+    --no-opengl-sw
+    --no-compiler-runtime
+    --no-translations
+    --release
+    --force
+    --qmldir %SRC_DIR%/src/qml
+    rdm.exe
 - rm -rf
     platforminputcontexts/
     qmltooling/
@@ -102,18 +121,26 @@ build_script:
 - cd Lib/site-packages
 - python -m pip install -r ./requirements.txt -t .
 - python -m compileall -b .
-- find . -name "*.py" -type f -print0 | xargs -0 rm -f
+- find . -name '*.py' -type f -print0 | xargs -0 rm -f
 - find . -name __pycache__ -type d -print0 | xargs -0 rm -rf
 - rm -rf py.qrc requirements.txt *.dist-info *.egg-info
 
 # bundle installer
 - cd %SRC_DIR%
-- call "C:\Program Files (x86)\NSIS\makensis.exe" /V1 /DVERSION=%RDM_VERSION%.0 ./build/windows/installer/installer.nsi
-- mv .\build\windows\installer\redis-desktop-manager-%RDM_VERSION%.0.exe .\build\windows\installer\redis-desktop-manager-%RELEASE_TAG%.exe
+- call
+    "C:\Program Files (x86)\NSIS\makensis.exe"
+    /V1
+    /DVERSION=%RDM_VERSION%.0
+    ./build/windows/installer/installer.nsi
+- mv
+    .\build\windows\installer\redis-desktop-manager-%RDM_VERSION%.0.exe
+    .\build\windows\installer\redis-desktop-manager-%RELEASE_TAG%.exe
 
 # create artifacts
 - cd %APPVEYOR_BUILD_FOLDER%
-- 7z.exe a "redis-desktop-manager-%RELEASE_TAG%.zip" "%SRC_DIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
+- 7z.exe a
+    "redis-desktop-manager-%RELEASE_TAG%.zip"
+    "%SRC_DIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
 
 artifacts:
 - path: redis-desktop-manager-$(RELEASE_TAG).zip
