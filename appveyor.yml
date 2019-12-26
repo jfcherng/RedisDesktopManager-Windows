@@ -6,6 +6,7 @@ install:
 - set REPO_DIR=%CD%
 - set SRC_DIR=C:\projects\RDM
 - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
+- set OPENSSL_DIR=C:\OpenSSL-Win64
 
 - set PY_DIR=C:\Python37-x64
 - set QT_DIR=C:\Qt\5.9\msvc2017_64
@@ -50,9 +51,12 @@ build_script:
 - cd %SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2
 - cmake
     -G "Visual Studio 15 2017 Win64"
-    -DCRYPTO_BACKEND=WinCNG
+    -DOPENSSL_ROOT_DIR="%OPENSSL_DIR%"
+    -DCRYPTO_BACKEND=OpenSSL
     -DCMAKE_BUILD_TYPE=RELEASE
-    -DBUILD_SHARED_LIBS=ON
+    -DBUILD_SHARED_LIBS=on
+    -DBUILD_EXAMPLES=off
+    -DBUILD_TESTING=off
     -DCMAKE_INSTALL_PREFIX=./output
     --build .
 - cmake --build . --config "Release" --target install
