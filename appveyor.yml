@@ -84,7 +84,6 @@ build_script:
 
 - cd %SRC_DIR%
 - cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
-- cp -f 3rdparty/qredisclient/botan.dll %RESOURCE_DIR%/
 
 - cd %RESOURCE_DIR%
 - windeployqt --no-angle --no-opengl-sw --no-compiler-runtime --no-translations --release --force --qmldir %SRC_DIR%/src/qml rdm.exe
