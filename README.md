@@ -11,6 +11,7 @@
 - 始終使用最新版本的 RedisDesktopManager 編譯／發布
 - 修復格式化工具 (formatter) 無法使用的問題
 - 允許使用 SSH Tunneling 功能
+  （如無法連接，可嘗試改用 [源码编译Redis Desktop Manager](https://kany.me/2019/10/10/compile-redis-desktop-manager/#成品下载) 的版本）
 
 
 ## 安裝使用
