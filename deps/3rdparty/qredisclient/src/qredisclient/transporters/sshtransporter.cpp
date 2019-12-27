@@ -62,13 +62,20 @@ bool RedisClient::SshTransporter::connectToHost()
 {
     ConnectionConfig config = m_connection->getConfig();
 
-    if (config.isSshPasswordUsed()) // patched
-        m_sshClient->setPassphrase(config.sshPassword());
-
     if (config.useSshTunnel()) {
         QString privateKey = config.getSshPrivateKeyPath();
         QString publicKey = config.getSshPublicKeyPath();
-        m_sshClient->setKeyFiles(publicKey, privateKey);
+        QString sshPassword = config.sshPassword();
+
+        if (!privateKey.isEmpty()) {
+            m_sshClient->setKeyFiles(publicKey, privateKey);
+            emit logEvent("SSH private key used...");
+        }
+
+        if (!sshPassword.isEmpty()) {
+            m_sshClient->setPassphrase(sshPassword);
+            emit logEvent("SSH password used...");
+        }
     }
 
     //connect to ssh server
