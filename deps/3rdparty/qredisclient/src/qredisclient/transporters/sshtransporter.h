@@ -13,10 +13,9 @@ namespace RedisClient {
  * @brief The SshTransporter class
  * Provides execution of redis commands through SSH tunnel.
  */
-class SshTransporter : public AbstractTransporter
-{
+class SshTransporter : public AbstractTransporter {
 public:
-    SshTransporter(Connection *);
+    SshTransporter(Connection*);
 
 public slots:
     void disconnectFromHost();
@@ -28,7 +27,7 @@ protected:
     QByteArray readFromSocket() override;
     void initSocket() override;
     bool connectToHost() override;
-    void sendCommand(const QByteArray& cmd) override;    
+    void sendCommand(const QByteArray& cmd) override;
 
 protected slots:
     void reconnect() override;
@@ -41,9 +40,10 @@ private slots:
     void OnSshSocketDestroyed();
 
 private:
-    QSshTcpSocket * m_socket; // owner of this object is sshClient
+    QSshTcpSocket* m_socket; // owner of this object is sshClient
     QSharedPointer<QSshClient> m_sshClient;
 
     bool m_isHostKeyAlreadyAdded;
 };
-}
+
+} // namespace RedisClient
