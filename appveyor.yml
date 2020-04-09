@@ -7,6 +7,7 @@ install:
 - set SRC_DIR=C:\projects\RDM
 - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
 - set OPENSSL_DIR=C:\OpenSSL-Win64
+- set PYTHON_EMBEDDED_VERSION=3.7.7
 
 - set GITBASH_DIR=C:\Program Files\Git\usr\bin
 - set PY_DIR=C:\Python37-x64
@@ -115,7 +116,11 @@ build_script:
 
 # install python deps
 - cd %RESOURCE_DIR%
-- 7z.exe x -aoa "%REPO_DIR%/python37-deps.7z" -o.
+- curl -fsSL
+    -o python-embedded.zip
+    "https://www.python.org/ftp/python/%PYTHON_EMBEDDED_VERSION%/python-%PYTHON_EMBEDDED_VERSION%-embed-amd64.zip"
+- 7z.exe x python-embedded.zip python37.zip python37.dll
+- rm -f python-embedded.zip
 - md Lib
 - cp -rf %SRC_DIR%/src/py Lib/site-packages
 - cd Lib/site-packages
