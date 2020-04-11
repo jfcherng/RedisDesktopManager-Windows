@@ -4,65 +4,66 @@ version: 2020.{build}
 clone_depth: 5
 
 install:
-- set REPO_DIR=%CD%
-- set SRC_DIR=C:\projects\RDM
-- set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
-- set OPENSSL_DIR=C:\OpenSSL-Win64
-- set PYTHON_EMBEDDED_VERSION=3.7.7
+  - set REPO_DIR=%CD%
+  - set SRC_DIR=C:\projects\RDM
+  - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
+  - set OPENSSL_DIR=C:\OpenSSL-Win64
+  - set PYTHON_EMBEDDED_VERSION=3.7.7
 
-- set GITBASH_DIR=C:\Program Files\Git\usr\bin
-- set PY_DIR=C:\Python37-x64
-- set QT_DIR=C:\Qt\5.13\msvc2017_64
-# prefer using Linux utils such as "find"
-- set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
+  - set GITBASH_DIR=C:\Program Files\Git\usr\bin
+  - set PY_DIR=C:\Python37-x64
+  - set QT_DIR=C:\Qt\5.13\msvc2017_64
 
-- set /P RDM_TARGET_BRANCH= < clone-branch.txt
-- git clone
+  # prefer using Linux utils such as "find"
+  - set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
+
+  - set /P RDM_TARGET_BRANCH= < clone-branch.txt
+  - git clone
     --depth=1
     --recursive
     --branch=%RDM_TARGET_BRANCH%
     https://github.com/uglide/RedisDesktopManager.git
     "%SRC_DIR%"
 
-- cd %SRC_DIR%
-- call
+  - cd %SRC_DIR%
+  - call
     "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
     x86_amd64
 
-- qmake -v
-- python -VV
+  - qmake -v
+  - python -VV
 
 before_build:
-- cd %SRC_DIR%
-- git rev-parse --short=8 HEAD > hash.txt
-- set /P RDM_HASH= < hash.txt
-- grep "    VERSION=" src/rdm.pro | grep -Eoh "[0-9]+\\.[0-9]+\\.[0-9]+" > version.txt
-- set /P RDM_VERSION= < version.txt
-- echo %RDM_VERSION%-%RDM_HASH%> release-tag.txt
-- set /P RELEASE_TAG= < release-tag.txt
-- echo BUILD FOR %RELEASE_TAG%
+  - cd %SRC_DIR%
+  - git rev-parse --short=8 HEAD > hash.txt
+  - set /P RDM_HASH= < hash.txt
+  - grep "    VERSION=" src/rdm.pro | grep -Eoh "[0-9]+\\.[0-9]+\\.[0-9]+" > version.txt
+  - set /P RDM_VERSION= < version.txt
+  - echo %RDM_VERSION%-%RDM_HASH%> release-tag.txt
+  - set /P RELEASE_TAG= < release-tag.txt
+  - echo BUILD FOR %RELEASE_TAG%
 
-# replace the version like "2020.0.0-dev" into "2020.0.0-f6430351"
-- sed -E -i"" src/rdm.pro -e 's@([0-9]+\\.[0-9]+\\.[0-9]+)-dev@\1-%RDM_HASH%@g'
-- cat src/rdm.pro
+  # replace the version like "2020.0.0-dev" into "2020.0.0-f6430351"
+  - sed -E -i"" src/rdm.pro -e 's@([0-9]+\\.[0-9]+\\.[0-9]+)-dev@\1-%RDM_HASH%@g'
+  - cat src/rdm.pro
 
 build_script:
-# put deps
-- cp -rf %REPO_DIR%/deps/* %SRC_DIR%
-- sed
+  # put deps
+  - cp -rf %REPO_DIR%/deps/* %SRC_DIR%
+  - sed
     -i"" %SRC_DIR%/3rdparty/qredisclient/src/qredisclient/connection.cpp
     -e 's@"sshtransporter.h"@"transporters/sshtransporter.h"@g'
 
-# build qsshclient
-- cd %SRC_DIR%/3rdparty
-- git clone --depth=1 --recursive https://github.com/jfcherng/qsshclient.git
-- cd qsshclient
-- qmake
-- nmake /S /NOLOGO release
+  # build qsshclient
+  - cd %SRC_DIR%/3rdparty
+  - git clone --depth=1 --recursive https://github.com/jfcherng/qsshclient.git
+  - cd qsshclient
+  - qmake
+  - nmake /S /NOLOGO release
 
-# build libssh2
-- cd %SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2
-- cmake
+  # build libssh2
+  - cd %SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2
+  - cmake
     -G "Visual Studio 15 2017 Win64"
     -DOPENSSL_ROOT_DIR="%OPENSSL_DIR%"
     -DCRYPTO_BACKEND=OpenSSL
@@ -72,38 +73,38 @@ build_script:
     -DBUILD_TESTING=off
     -DCMAKE_INSTALL_PREFIX=./output
     --build .
-- cmake
+  - cmake
     --build .
     --config "Release"
     --target install
-- mkdir build\src\release
-- cp -f output/lib/libssh2.lib %SRC_DIR%/3rdparty/qsshclient/
-- cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
+  - mkdir build\src\release
+  - cp -f output/lib/libssh2.lib %SRC_DIR%/3rdparty/qsshclient/
+  - cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
 
-# build app
-- cd %SRC_DIR%
-- python ./build/utils/set_version.py %RDM_VERSION% > ./src/version.h
-- cd %SRC_DIR%/3rdparty
-- nuget install zlib-msvc14-x64 -Version 1.2.11.7795
-- cd %SRC_DIR%/3rdparty/qredisclient/3rdparty/hiredis
-- git apply -v ../hiredis-win.patch
+  # build app
+  - cd %SRC_DIR%
+  - python ./build/utils/set_version.py %RDM_VERSION% > ./src/version.h
+  - cd %SRC_DIR%/3rdparty
+  - nuget install zlib-msvc14-x64 -Version 1.2.11.7795
+  - cd %SRC_DIR%/3rdparty/qredisclient/3rdparty/hiredis
+  - git apply -v ../hiredis-win.patch
 
-- cd %SRC_DIR%/src
-- lrelease rdm.pro
-- qmake
+  - cd %SRC_DIR%/src
+  - lrelease rdm.pro
+  - qmake
     CONFIG+=release
     DEFINES+="SSH_SUPPORT=1"
     LIBS+="-L%SRC_DIR%/3rdparty/qsshclient"
     LIBS+="-lqsshclient -llibssh2"
     INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/src"
     INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2/output/include"
-- nmake /S /NOLOGO release
+  - nmake /S /NOLOGO release
 
-- cd %SRC_DIR%
-- cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
+  - cd %SRC_DIR%
+  - cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
 
-- cd %RESOURCE_DIR%
-- windeployqt
+  - cd %RESOURCE_DIR%
+  - windeployqt
     --no-angle
     --no-opengl-sw
     --no-compiler-runtime
@@ -112,48 +113,48 @@ build_script:
     --force
     --qmldir %SRC_DIR%/src/qml
     rdm.exe
-- rm -rf
+  - rm -rf
     platforminputcontexts/
     qmltooling/
     QtGraphicalEffects/
     imageformats/qtiff.dll
     imageformats/qwebp.dll
 
-# install python deps
-- cd %RESOURCE_DIR%
-- curl -fsSL
+  # install python deps
+  - cd %RESOURCE_DIR%
+  - curl -fsSL
     -o python-embedded.zip
     "https://www.python.org/ftp/python/%PYTHON_EMBEDDED_VERSION%/python-%PYTHON_EMBEDDED_VERSION%-embed-amd64.zip"
-- 7z.exe x python-embedded.zip python37.zip python37.dll
-- rm -f python-embedded.zip
-- md Lib
-- cp -rf %SRC_DIR%/src/py Lib/site-packages
-- cd Lib/site-packages
-- python -m pip install -r ./requirements.txt -t .
-- python -m compileall -b .
-- find . -name '*.py' -type f -print0 | xargs -0 rm -f
-- find . -name __pycache__ -type d -print0 | xargs -0 rm -rf
-- rm -rf py.qrc requirements.txt *.dist-info *.egg-info
+  - 7z.exe x python-embedded.zip python37.zip python37.dll
+  - rm -f python-embedded.zip
+  - md Lib
+  - cp -rf %SRC_DIR%/src/py Lib/site-packages
+  - cd Lib/site-packages
+  - python -m pip install -r ./requirements.txt -t .
+  - python -m compileall -b .
+  - find . -name '*.py' -type f -print0 | xargs -0 rm -f
+  - find . -name __pycache__ -type d -print0 | xargs -0 rm -rf
+  - rm -rf py.qrc requirements.txt *.dist-info *.egg-info
 
-# bundle installer
-- cd %SRC_DIR%
-- call
+  # bundle installer
+  - cd %SRC_DIR%
+  - call
     "C:\Program Files (x86)\NSIS\makensis.exe"
     /V1
     /DVERSION=%RDM_VERSION%.0
     ./build/windows/installer/installer.nsi
-- mv
+  - mv
     .\build\windows\installer\redis-desktop-manager-%RDM_VERSION%.0.exe
     .\build\windows\installer\redis-desktop-manager-%RELEASE_TAG%.exe
 
-# create artifacts
-- cd %APPVEYOR_BUILD_FOLDER%
-- 7z.exe a
+  # create artifacts
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 7z.exe a
     "redis-desktop-manager-%RELEASE_TAG%.zip"
     "%SRC_DIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
 
 artifacts:
-- path: redis-desktop-manager-$(RELEASE_TAG).zip
+  - path: redis-desktop-manager-$(RELEASE_TAG).zip
 
 deploy:
   release: $(RELEASE_TAG)
@@ -161,7 +162,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: s9uw2NujMMtddlR5nLNRnwiTHhHLhuUsPL3w4PLbucCNBS9EQKBXBY4JfuMcUCZL # your encrypted token from GitHub
-  artifact: redis-desktop-manager-$(RELEASE_TAG).zip   # upload all NuGet packages to release assets
+  artifact: redis-desktop-manager-$(RELEASE_TAG).zip # upload all NuGet packages to release assets
   draft: false
   prerelease: true
   force_update: true
