@@ -1,5 +1,12 @@
 # RedisDesktopManager-Windows
 
+[![AppVeyor branch](https://img.shields.io/appveyor/ci/jfcherng/RedisDesktopManager-Windows/master?style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/jfcherng/RedisDesktopManager-Windows)
+[![GitHub All Releases](https://img.shields.io/github/downloads/jfcherng/RedisDesktopManager-Windows/total?style=flat-square&logo=github)](https://github.com/jfcherng/RedisDesktopManager-Windows/releases)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/jfcherng/RedisDesktopManager-Windows?style=flat-square&logo=github)](https://github.com/jfcherng/RedisDesktopManager-Windows/tags)
+[![Project license](https://img.shields.io/github/license/jfcherng/RedisDesktopManager-Windows?style=flat-square&logo=github)](https://github.com/jfcherng/RedisDesktopManager-Windows/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/jfcherng/RedisDesktopManager-Windows?style=flat-square&logo=github)](https://github.com/jfcherng/RedisDesktopManager-Windows/stargazers)
+[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&logo=paypal)](https://www.paypal.me/jfcherng/5usd)
+
 如果在條件允許的情況下，衷心地希望購買[訂閱](https://redisdesktop.com/pricing)支持作者，
 在這裡也非常感謝作者開源 [RedisDesktopManager](https://github.com/uglide/RedisDesktopManager) 。
 
