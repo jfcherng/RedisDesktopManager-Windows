@@ -1,5 +1,6 @@
+# https://www.appveyor.com/docs/windows-images-software/#visual-studio-2017
 image: Visual Studio 2017
-version: 2019.1.{build}
+version: 2020.{build}
 clone_depth: 5
 
 install:
@@ -11,7 +12,7 @@ install:
 
 - set GITBASH_DIR=C:\Program Files\Git\usr\bin
 - set PY_DIR=C:\Python37-x64
-- set QT_DIR=C:\Qt\5.9\msvc2017_64
+- set QT_DIR=C:\Qt\5.13\msvc2017_64
 # prefer using Linux utils such as "find"
 - set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
 
