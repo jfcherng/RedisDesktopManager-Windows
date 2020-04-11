@@ -24,9 +24,9 @@ RedisDesktopManager 僅支援 x64 平台。
 
 ## FAQ
 
-- 啟動出現 `0xc000007b` 錯誤
+- 啟動出現 `0xc000007b` 錯誤，或找不到 DLL
 
-  下載安裝 [vc_redist.x64.exe](https://aka.ms/vs/15/release/vc_redist.x64.exe) 點擊修復選項。
+  下載安裝 [vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe) 點擊修復選項。
 
 
 ## 參考文件
