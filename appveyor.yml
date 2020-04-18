@@ -4,12 +4,13 @@ version: 2020.{build}
 clone_depth: 5
 
 install:
+  - set PYTHON_EMBEDDED_VERSION=3.7.7
+
+  # directories
   - set REPO_DIR=%CD%
   - set SRC_DIR=C:\projects\RDM
   - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
   - set OPENSSL_DIR=C:\OpenSSL-Win64
-  - set PYTHON_EMBEDDED_VERSION=3.7.7
-
   - set GITBASH_DIR=C:\Program Files\Git\usr\bin
   - set PY_DIR=C:\Python37-x64
   - set QT_DIR=C:\Qt\5.13\msvc2017_64
