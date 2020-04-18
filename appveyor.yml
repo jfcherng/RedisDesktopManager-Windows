@@ -162,7 +162,7 @@ deploy:
   auth_token:
     secure: s9uw2NujMMtddlR5nLNRnwiTHhHLhuUsPL3w4PLbucCNBS9EQKBXBY4JfuMcUCZL # your encrypted token from GitHub
   artifact: redis-desktop-manager-$(RELEASE_TAG).zip # upload all NuGet packages to release assets
-  draft: false
+  draft: true
   prerelease: true
   force_update: true
   on:
