@@ -48,11 +48,10 @@ before_build:
   - cat src/rdm.pro
 
 build_script:
-  # put deps
+  # deal with SSH deps
   - cp -rf %REPO_DIR%/deps/* %SRC_DIR%
-  - sed
-    -i"" %SRC_DIR%/3rdparty/qredisclient/src/qredisclient/connection.cpp
-    -e 's@"sshtransporter.h"@"transporters/sshtransporter.h"@g'
+  - cd %SRC_DIR%/3rdparty/qredisclient
+  - git apply -v qredisclient.patch
 
   # build qsshclient
   - cd %SRC_DIR%/3rdparty

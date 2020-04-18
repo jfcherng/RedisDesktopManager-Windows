@@ -1,0 +1,13 @@
+diff --git a/src/qredisclient/connection.cpp b/src/qredisclient/connection.cpp
+index 17c2036..321968a 100644
+--- a/src/qredisclient/connection.cpp
++++ b/src/qredisclient/connection.cpp
+@@ -12,7 +12,7 @@
+ #include "utils/sync.h"
+ 
+ #ifdef SSH_SUPPORT
+-#include "sshtransporter.h"
++#include "transporters/sshtransporter.h"
+ #endif
+ 
+ inline void initResources() { Q_INIT_RESOURCE(lua); }
