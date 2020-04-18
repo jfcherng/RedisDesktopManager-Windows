@@ -17,6 +17,9 @@ install:
   # prefer using Linux utils such as "find"
   - set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
 
+  # update all submodules
+  - git submodule update --init --recursive
+
   - set /P RDM_TARGET_BRANCH= < clone-branch.txt
   - git clone
     --depth=1
@@ -54,9 +57,7 @@ build_script:
   - git apply -v qredisclient.patch
 
   # build qsshclient
-  - cd %SRC_DIR%/3rdparty
-  - git clone --depth=1 --recursive https://github.com/jfcherng/qsshclient.git
-  - cd qsshclient
+  - cd %SRC_DIR%/3rdparty/qsshclient
   - qmake
   - nmake /S /NOLOGO release
 

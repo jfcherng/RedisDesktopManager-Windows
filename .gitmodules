@@ -1,0 +1,3 @@
+[submodule "deps/3rdparty/qsshclient"]
+	path = deps/3rdparty/qsshclient
+	url = https://github.com/jfcherng/qsshclient.git
