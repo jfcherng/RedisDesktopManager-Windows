@@ -2,6 +2,7 @@
 image: Visual Studio 2017
 version: 2020.{build}
 clone_depth: 5
+skip_tags: true
 
 install:
   - set PYTHON_EMBEDDED_VERSION=3.7.7
