@@ -18,9 +18,10 @@ install:
   # prefer using Linux utils such as "find"
   - set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
 
-  # update all submodules
+  # update all submodules for this repo
   - git submodule update --init --recursive
 
+  # clone the RedisDesktopManager repo
   - set /P RDM_TARGET_BRANCH= < clone-branch.txt
   - git clone
     --depth=1
@@ -29,7 +30,16 @@ install:
     https://github.com/uglide/RedisDesktopManager.git
     "%SRC_DIR%"
 
+  # apply patches to the RedisDesktopManager repo
+  - cp -rf %REPO_DIR%/deps/* %SRC_DIR%
   - cd %SRC_DIR%
+  - git apply -v 0001-Patch-RedisDesktopManager.patch
+  - cd %SRC_DIR%/3rdparty/qredisclient
+  - git apply -v 0001-Patch-qredisclient.patch
+  - cd %SRC_DIR%/3rdparty/qredisclient/3rdparty/hiredis
+  - git apply -v ../hiredis-win.patch
+
+  # enable environment
   - call
     "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
     x86_amd64
@@ -52,11 +62,6 @@ before_build:
   - cat src/rdm.pro
 
 build_script:
-  # deal with SSH deps
-  - cp -rf %REPO_DIR%/deps/* %SRC_DIR%
-  - cd %SRC_DIR%/3rdparty/qredisclient
-  - git apply -v qredisclient.patch
-
   # build qsshclient
   - cd %SRC_DIR%/3rdparty/qsshclient
   - qmake
@@ -87,8 +92,6 @@ build_script:
   - python ./build/utils/set_version.py %RDM_VERSION% > ./src/version.h
   - cd %SRC_DIR%/3rdparty
   - nuget install zlib-msvc14-x64 -Version 1.2.11.7795
-  - cd %SRC_DIR%/3rdparty/qredisclient/3rdparty/hiredis
-  - git apply -v ../hiredis-win.patch
 
   - cd %SRC_DIR%/src
   - lrelease rdm.pro
