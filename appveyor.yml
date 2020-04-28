@@ -99,6 +99,7 @@ build_script:
   - qmake
     CONFIG+=release
     DEFINES+="SSH_SUPPORT=1"
+    DEFINES+="RDM_APPSTORE=1"
     LIBS+="-L%SRC_DIR%/3rdparty/qsshclient"
     LIBS+="-lqsshclient -llibssh2"
     INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/src"
