@@ -1,7 +1,7 @@
 From 756330d99499226e79e3643a3f1e317017f41f83 Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
 Date: Mon, 20 Apr 2020 17:08:22 +0800
-Subject: [PATCH] Patch qredisclient
+Subject: [PATCH] fix: SSH header file path
 
 Signed-off-by: Jack Cherng <jfcherng@gmail.com>
 ---

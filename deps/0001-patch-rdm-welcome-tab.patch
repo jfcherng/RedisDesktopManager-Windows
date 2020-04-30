@@ -1,7 +1,7 @@
 From 56c7d99441d728907e193ec6337ed1c842328393 Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
 Date: Mon, 20 Apr 2020 17:11:24 +0800
-Subject: [PATCH] Patch RedisDesktopManager
+Subject: [PATCH] chore: patch RDM WelcomeTab for repo information
 
 Signed-off-by: Jack Cherng <jfcherng@gmail.com>
 ---
@@ -17,7 +17,7 @@ index 7dd949bf..61d1dd42 100644
                  Layout.fillWidth: true
                  RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size:32pt;">Redis Desktop Manager</span>'}
 -                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>Version</b> ' + Qt.application.version +'</span>' }
-+                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>Version</b> <a href="https://github.com/jfcherng/RedisDesktopManager-Windows">' + Qt.application.version +'</a></span>' }
++                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>Version</b> <a href="https://github.com/jfcherng/RedisDesktopManager-Windows">' + Qt.application.version +'</a> @ <a href="https://github.com/jfcherng">jfcherng</a></span>' }
                  RichTextWithLinks { Layout.fillWidth: true;  html:  '<span style="font-size: 11px;">Powered by awesome <a href="https://github.com/uglide/RedisDesktopManager/tree/2019/3rdparty">open-source software</a>, '
                                                                      + '<br /><a href="http://icons8.com/">icons from icons8.com</a> and '
                                                                      + '<a href="http://redis.io/">Redis Logo</a>.</span>'}
