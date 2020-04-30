@@ -14,10 +14,14 @@
 
 感謝由 [@lework](https://github.com/lework) 所編寫測試的初始版本 `appveyor.yml` 。
 
-- 編譯時自動使用指定版本的 Embedded Python
-- 修復格式化工具 (formatter) 無法使用的問題
 - 允許使用 SSH Tunneling 功能
 - 取消啟動時的軟體更新檢查
+- 將 Visual C++ Redistributable 打包進安裝檔（而非從網路上下載）
+
+已被上游採用的修改：
+
+- 編譯時自動使用指定版本的 Embedded Python
+- 修復格式化工具 (formatter) 無法使用的問題
 
 ## 安裝使用
 
