@@ -1,0 +1,54 @@
+From d0eec6294c49d017aea19a4ccbe08a2252840b57 Mon Sep 17 00:00:00 2001
+From: Jack Cherng <jfcherng@gmail.com>
+Date: Fri, 1 May 2020 05:29:42 +0800
+Subject: [PATCH] build: pack up vc_redist.x64.exe into installer
+
+Signed-off-by: Jack Cherng <jfcherng@gmail.com>
+---
+ .../include/install_vcredist_x64.nsh          | 21 +++----------------
+ 1 file changed, 3 insertions(+), 18 deletions(-)
+
+diff --git a/build/windows/installer/include/install_vcredist_x64.nsh b/build/windows/installer/include/install_vcredist_x64.nsh
+index 72243d44..537ce3e7 100644
+--- a/build/windows/installer/include/install_vcredist_x64.nsh
++++ b/build/windows/installer/include/install_vcredist_x64.nsh
+@@ -4,22 +4,7 @@
+   !define VCplus_URL "https://aka.ms/vs/15/release/vc_redist.x64.exe"
+ 
+   ReadRegDWORD $0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" Bld
+-  IntCmp $0 27024 VCInstalled VCDownload
+-
+-  VCDownload:
+-  DetailPrint "Beginning download of VC++ 2017 Redistributable."
+-  inetc::get /TIMEOUT=30000 ${VCplus_URL} "$TEMP\vc_redist.x64.exe" /END
+-  Pop $0
+-  DetailPrint "Result: $0"
+-  StrCmp $0 "OK" InstallVCplusplus
+-  StrCmp $0 "cancelled" VCCanceled
+-  inetc::get /TIMEOUT=30000 /NOPROXY ${VCplus_URL} "$TEMP\vc_redist.x64.exe" /END
+-  Pop $0
+-  DetailPrint "Result: $0"
+-  StrCmp $0 "OK" InstallVCplusplus
+-
+-  MessageBox MB_ICONSTOP "Download failed: $0. Please install it manually and try again: $VCplus_URL"
+-  Abort
++  IntCmp $0 27024 VCInstalled InstallVCplusplus
+ 
+   InstallVCplusplus:
+   DetailPrint "Completed download."
+@@ -32,10 +17,10 @@
+ 
+   DetailPrint "Pausing installation while downloaded VC++ installer runs."
+   DetailPrint "Installation could take several minutes to complete."
+-  ExecWait '$TEMP\vc_redist.x64.exe /passive /norestart'
++  ExecWait '$INSTDIR\vc_redist.x64.exe /passive /norestart'
+ 
+   DetailPrint "Removing VC++ installer."
+-  Delete "$TEMP\vc_redist.x64.exe"
++  Delete "$INSTDIR\vc_redist.x64.exe"
+ 
+   DetailPrint "VC++ installer removed."
+   goto VCInstalled
+-- 
+2.26.2.windows.1
+
