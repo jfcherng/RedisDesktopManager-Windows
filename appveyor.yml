@@ -109,6 +109,7 @@ build_script:
   - cd %SRC_DIR%
   - cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
 
+  # make rdm.exe Qt-distributable
   - cd %RESOURCE_DIR%
   - windeployqt
     --no-angle
@@ -119,6 +120,8 @@ build_script:
     --force
     --qmldir %SRC_DIR%/src/qml
     rdm.exe
+
+  # seems to be useless
   - rm -rf
     platforminputcontexts/
     qmltooling/
@@ -150,14 +153,14 @@ build_script:
     /DVERSION=%RDM_VERSION%.0
     ./build/windows/installer/installer.nsi
   - mv
-    .\build\windows\installer\redis-desktop-manager-%RDM_VERSION%.0.exe
-    .\build\windows\installer\redis-desktop-manager-%RELEASE_TAG%.exe
+    "build/windows/installer/redis-desktop-manager-%RDM_VERSION%.0.exe"
+    "%SRC_DIR%/redis-desktop-manager-%RELEASE_TAG%.exe"
 
   # create artifacts
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z.exe a
     "redis-desktop-manager-%RELEASE_TAG%.zip"
-    "%SRC_DIR%\build/windows/installer/redis-desktop-manager-%RELEASE_TAG%.exe"
+    "%SRC_DIR%/redis-desktop-manager-%RELEASE_TAG%.exe"
 
 artifacts:
   - path: redis-desktop-manager-$(RELEASE_TAG).zip
