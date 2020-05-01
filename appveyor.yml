@@ -99,6 +99,7 @@ build_script:
   - lrelease rdm.pro
   - qmake
     CONFIG+=release
+    CONFIG+=qtquickcompiler
     DEFINES+="SSH_SUPPORT=1"
     DEFINES+="RDM_APPSTORE=1"
     LIBS+="-L%SRC_DIR%/3rdparty/qsshclient"
