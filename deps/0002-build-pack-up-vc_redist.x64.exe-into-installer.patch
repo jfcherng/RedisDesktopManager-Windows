@@ -1,19 +1,23 @@
-From d0eec6294c49d017aea19a4ccbe08a2252840b57 Mon Sep 17 00:00:00 2001
+From 26f7830596041ec95816bb14248de4a7d1d26533 Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
-Date: Fri, 1 May 2020 05:29:42 +0800
+Date: Fri, 1 May 2020 12:41:19 +0800
 Subject: [PATCH] build: pack up vc_redist.x64.exe into installer
 
 Signed-off-by: Jack Cherng <jfcherng@gmail.com>
 ---
- .../include/install_vcredist_x64.nsh          | 21 +++----------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+ .../include/install_vcredist_x64.nsh          | 23 ++++---------------
+ 1 file changed, 4 insertions(+), 19 deletions(-)
 
 diff --git a/build/windows/installer/include/install_vcredist_x64.nsh b/build/windows/installer/include/install_vcredist_x64.nsh
-index 72243d44..537ce3e7 100644
+index 72243d44..54fa4a13 100644
 --- a/build/windows/installer/include/install_vcredist_x64.nsh
 +++ b/build/windows/installer/include/install_vcredist_x64.nsh
-@@ -4,22 +4,7 @@
-   !define VCplus_URL "https://aka.ms/vs/15/release/vc_redist.x64.exe"
+@@ -1,25 +1,10 @@
+ !include LogicLib.nsh
+ 
+ !macro InstallVCredist
+-  !define VCplus_URL "https://aka.ms/vs/15/release/vc_redist.x64.exe"
++  !define VCplus_URL "https://aka.ms/vs/16/release/vc_redist.x64.exe"
  
    ReadRegDWORD $0 HKLM "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" Bld
 -  IntCmp $0 27024 VCInstalled VCDownload
@@ -32,7 +36,7 @@ index 72243d44..537ce3e7 100644
 -
 -  MessageBox MB_ICONSTOP "Download failed: $0. Please install it manually and try again: $VCplus_URL"
 -  Abort
-+  IntCmp $0 27024 VCInstalled InstallVCplusplus
++  IntCmp $0 28508 VCInstalled InstallVCplusplus VCInstalled
  
    InstallVCplusplus:
    DetailPrint "Completed download."

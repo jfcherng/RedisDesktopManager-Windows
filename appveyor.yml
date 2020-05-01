@@ -1,5 +1,5 @@
-# https://www.appveyor.com/docs/windows-images-software/#visual-studio-2017
-image: Visual Studio 2017
+# https://www.appveyor.com/docs/windows-images-software/#visual-studio-2019
+image: Visual Studio 2019
 version: 2020.{build}
 clone_depth: 5
 skip_tags: true
@@ -43,7 +43,7 @@ install:
 
   # enable environment
   - call
-    "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
     x86_amd64
 
   - qmake -v
@@ -72,7 +72,7 @@ build_script:
   # build libssh2
   - cd %SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2
   - cmake
-    -G "Visual Studio 15 2017 Win64"
+    -G "Visual Studio 16 2019" -A x64
     -DOPENSSL_ROOT_DIR="%OPENSSL_DIR%"
     -DCRYPTO_BACKEND=OpenSSL
     -DCMAKE_BUILD_TYPE=RELEASE
@@ -150,7 +150,7 @@ build_script:
   # download Visual C++ Redistributable which will be bundled into the installer
   - curl -fsSL
     -o "%RESOURCE_DIR%/vc_redist.x64.exe"
-    "https://aka.ms/vs/15/release/vc_redist.x64.exe"
+    "https://aka.ms/vs/16/release/vc_redist.x64.exe"
 
   # bundle installer
   - cd %SRC_DIR%

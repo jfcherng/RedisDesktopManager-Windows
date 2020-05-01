@@ -16,6 +16,7 @@
 
 - 允許使用 SSH Tunneling 功能
 - 取消啟動時的軟體更新檢查
+- 使用 Visual Studio 2019 編譯
 - 將 Visual C++ Redistributable 打包進安裝檔（而非從網路上下載）
 
 已被上游採用的修改：
@@ -29,12 +30,6 @@ RedisDesktopManager 僅支援 x64 平台。
 
 在本倉庫的 [Releases](https://github.com/jfcherng/RedisDesktopManager-Windows/releases)
 頁面下載 `redis-desktop-manager-XXX.zip` ，解壓縮後安裝 `redis-desktop-manager-XXX.exe` 即可。
-
-## FAQ
-
-- 啟動出現 `0xc000007b` 錯誤，或找不到 DLL
-
-  下載安裝 [vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe) 點擊修復選項。
 
 ## 參考文件
 
