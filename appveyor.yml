@@ -37,6 +37,7 @@ install:
   - cd %SRC_DIR%
   - git apply -v 0001-patch-rdm-welcome-tab.patch
   - git apply -v 0002-build-pack-up-vc_redist.x64.exe-into-installer.patch
+  - git apply -v 0003-chore-allow-specifying-detailed-sni-version-info.patch
 
   - cd %SRC_DIR%/3rdparty/qredisclient
   - git apply -v 0001-fix-ssh-header-file-path.patch
@@ -57,14 +58,10 @@ before_build:
   - git rev-parse --short=8 HEAD > hash.txt
   - set /P RDM_HASH= < hash.txt
 
-  # replace the version like "2020.0.0-dev" into "2020.0.BUILD_NUMBER-f6430351"
-  - sed -E -i"" src/rdm.pro -e 's@([0-9]+)\\.([0-9]+)\\.([0-9]+)-dev@\1.\2.%APPVEYOR_BUILD_NUMBER%-%RDM_HASH%@g'
-  - grep "    VERSION=" src/rdm.pro | grep -Eoh "[0-9]+\\.[0-9]+\\.[0-9]+" > version.txt
-  - set /P RDM_VERSION= < version.txt
-
-  - echo %RDM_VERSION%-%RDM_HASH%> release-tag.txt
-  - set /P RELEASE_TAG= < release-tag.txt
-  - echo BUILD FOR %RELEASE_TAG%
+  # the version number (must be in the form of x.y.z)
+  - set RDM_VERSION=%APPVEYOR_BUILD_VERSION%
+  # the tag name of this release such as 2020.0.270-5a10305a
+  - set RDM_RELEASE_TAG=%RDM_VERSION%-%RDM_HASH%
 
 build_script:
   # build qsshclient
@@ -93,14 +90,13 @@ build_script:
   - cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
 
   # build app
-  - cd %SRC_DIR%
-  - python ./build/utils/set_version.py %RDM_VERSION% > ./src/version.h
   - cd %SRC_DIR%/3rdparty
   - nuget install zlib-msvc14-x64 -Version 1.2.11.7795
 
   - cd %SRC_DIR%/src
   - lrelease rdm.pro
   - qmake
+    VERSION="%RDM_RELEASE_TAG%"
     CONFIG+=release
     CONFIG+=qtquickcompiler
     DEFINES+="SSH_SUPPORT=1"
@@ -162,28 +158,27 @@ build_script:
   - call
     "C:\Program Files (x86)\NSIS\makensis.exe"
     /V1
-    /DVERSION=%RDM_VERSION%.0
+    /DVERSION=%RDM_VERSION%
+    /DRELEASE_TAG=%RDM_RELEASE_TAG%
     build/windows/installer/installer.nsi
-  - mv
-    "build/windows/installer/redis-desktop-manager-%RDM_VERSION%.0.exe"
-    "%SRC_DIR%/redis-desktop-manager-%RELEASE_TAG%.exe"
+  - ls -alFh "build/windows/installer"
 
   # create artifacts
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z.exe a
-    "redis-desktop-manager-%RELEASE_TAG%.zip"
-    "%SRC_DIR%/redis-desktop-manager-%RELEASE_TAG%.exe"
+    "redis-desktop-manager-%RDM_RELEASE_TAG%.zip"
+    "%SRC_DIR%/build/windows/installer/redis-desktop-manager-%RDM_RELEASE_TAG%.exe"
 
 artifacts:
-  - path: redis-desktop-manager-$(RELEASE_TAG).zip
+  - path: redis-desktop-manager-$(RDM_RELEASE_TAG).zip
 
 deploy:
-  release: $(RELEASE_TAG)
+  release: $(RDM_RELEASE_TAG)
   description: "Thank you [RedisDesktopManager](https://github.com/uglide/RedisDesktopManager)!"
   provider: GitHub
   auth_token:
     secure: s9uw2NujMMtddlR5nLNRnwiTHhHLhuUsPL3w4PLbucCNBS9EQKBXBY4JfuMcUCZL # your encrypted token from GitHub
-  artifact: redis-desktop-manager-$(RELEASE_TAG).zip # upload all NuGet packages to release assets
+  artifact: redis-desktop-manager-$(RDM_RELEASE_TAG).zip # upload all NuGet packages to release assets
   draft: true
   prerelease: true
   force_update: true

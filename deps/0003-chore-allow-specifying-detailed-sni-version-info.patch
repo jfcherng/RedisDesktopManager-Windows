@@ -1,0 +1,48 @@
+From ac32749ce3692e6d04914266327e6befd5c09f7c Mon Sep 17 00:00:00 2001
+From: Jack Cherng <jfcherng@gmail.com>
+Date: Sat, 2 May 2020 23:42:45 +0800
+Subject: [PATCH] chore: allow specifying detailed version info in the NSI
+ script
+
+Signed-off-by: Jack Cherng <jfcherng@gmail.com>
+---
+ build/windows/installer/installer.nsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/build/windows/installer/installer.nsi b/build/windows/installer/installer.nsi
+index 10e86140..f31234a1 100644
+--- a/build/windows/installer/installer.nsi
++++ b/build/windows/installer/installer.nsi
+@@ -48,17 +48,17 @@ Var StartMenuGroup
+ !insertmacro MUI_LANGUAGE English
+ 
+ # Installer attributes
+-OutFile redis-desktop-manager-${VERSION}.exe
++OutFile redis-desktop-manager-${RELEASE_TAG}.exe
+ InstallDir $PROGRAMFILES64\RedisDesktopManager
+ CRCCheck on
+ XPStyle on
+ ShowInstDetails show
+ VIProductVersion ${VERSION}.0
+ VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName "Redis Desktop Manager"
+-VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${VERSION}"
++VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${RELEASE_TAG}"
+ VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyName "${COMPANY}"
+ VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyWebsite "${URL}"
+-VIAddVersionKey /LANG=${LANG_ENGLISH} FileVersion "${VERSION}"
++VIAddVersionKey /LANG=${LANG_ENGLISH} FileVersion "${RELEASE_TAG}"
+ VIAddVersionKey /LANG=${LANG_ENGLISH} FileDescription ""
+ VIAddVersionKey /LANG=${LANG_ENGLISH} LegalCopyright ""
+ InstallDirRegKey HKLM "${REGKEY}" Path
+@@ -102,7 +102,7 @@ Section -post SEC0001
+     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\$(^UninstallLink).lnk" $INSTDIR\uninstall.exe
+ 
+     WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
+-    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayVersion "${VERSION}"
++    WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayVersion "${RELEASE_TAG}"
+     WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" Publisher "${COMPANY}"
+     WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" URLInfoAbout "${URL}"
+     WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayIcon $INSTDIR\uninstall.exe
+-- 
+2.26.2.windows.1
+
