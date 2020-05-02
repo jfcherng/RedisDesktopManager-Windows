@@ -5,6 +5,7 @@ clone_depth: 5
 skip_tags: true
 
 install:
+  - set RDM_TARGET_BRANCH=2020
   - set PYTHON_EMBEDDED_VERSION=3.7.7
 
   # directories
@@ -23,7 +24,6 @@ install:
   - git submodule update --init --recursive
 
   # clone the RedisDesktopManager repo
-  - set /P RDM_TARGET_BRANCH= < clone-branch.txt
   - git clone
     --depth=1
     --recursive
