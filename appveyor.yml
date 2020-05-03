@@ -10,9 +10,9 @@ install:
 
   # directories
   - set REPO_DIR=%CD%
-  - set SRC_DIR=C:\projects\RDM
+  - set RDM_DIR=C:\projects\RDM
   - set VCREDIST_DIR=C:\projects\vcredist
-  - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
+  - set RESOURCE_DIR=%RDM_DIR%\build\windows\installer\resources
   - set OPENSSL_DIR=C:\OpenSSL-Win64
   - set GITBASH_DIR=C:\Program Files\Git\usr\bin
   - set PY_DIR=C:\Python37-x64
@@ -30,7 +30,7 @@ install:
     --recursive
     --branch=%RDM_TARGET_BRANCH%
     https://github.com/uglide/RedisDesktopManager.git
-    "%SRC_DIR%"
+    "%RDM_DIR%"
 
   # clone the vcredist repo
   - git clone
@@ -39,17 +39,17 @@ install:
     "%VCREDIST_DIR%"
 
   # apply patches to the RedisDesktopManager repo
-  - cp -rf %REPO_DIR%/deps/* %SRC_DIR%
+  - cp -rf %REPO_DIR%/deps/* %RDM_DIR%
 
-  - cd %SRC_DIR%
+  - cd %RDM_DIR%
   - git apply -v 0001-patch-rdm-welcome-tab.patch
   - git apply -v 0002-chore-do-not-install-system-wide-vcredist.patch
   - git apply -v 0003-chore-allow-specifying-detailed-sni-version-info.patch
 
-  - cd %SRC_DIR%/3rdparty/qredisclient
+  - cd %RDM_DIR%/3rdparty/qredisclient
   - git apply -v 0001-fix-ssh-header-file-path.patch
 
-  - cd %SRC_DIR%/3rdparty/qredisclient/3rdparty/hiredis
+  - cd %RDM_DIR%/3rdparty/qredisclient/3rdparty/hiredis
   - git apply -v ../hiredis-win.patch
 
   # enable environment
@@ -61,7 +61,7 @@ install:
   - python -VV
 
 before_build:
-  - cd %SRC_DIR%
+  - cd %RDM_DIR%
   - git rev-parse --short=8 HEAD > hash.txt
   - set /P RDM_HASH= < hash.txt
 
@@ -72,12 +72,12 @@ before_build:
 
 build_script:
   # build qsshclient
-  - cd %SRC_DIR%/3rdparty/qsshclient
+  - cd %RDM_DIR%/3rdparty/qsshclient
   - qmake CONFIG+=release
   - nmake /S /NOLOGO release
 
   # build libssh2
-  - cd %SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2
+  - cd %RDM_DIR%/3rdparty/qsshclient/3rdparty/libssh2
   - cmake
     -G "Visual Studio 16 2019" -A x64
     -DOPENSSL_ROOT_DIR="%OPENSSL_DIR%"
@@ -93,14 +93,14 @@ build_script:
     --config "Release"
     --target install
   - mkdir build\src\release
-  - cp -f output/lib/libssh2.lib %SRC_DIR%/3rdparty/qsshclient/
+  - cp -f output/lib/libssh2.lib %RDM_DIR%/3rdparty/qsshclient/
   - cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
 
   # build app
-  - cd %SRC_DIR%/3rdparty
+  - cd %RDM_DIR%/3rdparty
   - nuget install zlib-msvc14-x64 -Version 1.2.11.7795
 
-  - cd %SRC_DIR%/src
+  - cd %RDM_DIR%/src
   - lrelease rdm.pro
   - qmake
     VERSION="%RDM_RELEASE_TAG%"
@@ -108,13 +108,13 @@ build_script:
     CONFIG+=qtquickcompiler
     DEFINES+="SSH_SUPPORT=1"
     DEFINES+="RDM_APPSTORE=1"
-    LIBS+="-L%SRC_DIR%/3rdparty/qsshclient"
+    LIBS+="-L%RDM_DIR%/3rdparty/qsshclient"
     LIBS+="-lqsshclient -llibssh2"
-    INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/src"
-    INCLUDEPATH+="%SRC_DIR%/3rdparty/qsshclient/3rdparty/libssh2/output/include"
+    INCLUDEPATH+="%RDM_DIR%/3rdparty/qsshclient/src"
+    INCLUDEPATH+="%RDM_DIR%/3rdparty/qsshclient/3rdparty/libssh2/output/include"
   - nmake /S /NOLOGO release
 
-  - cd %SRC_DIR%
+  - cd %RDM_DIR%
   - cp -f bin/windows/release/rdm.exe %RESOURCE_DIR%/
 
   # make rdm.exe Qt-distributable
@@ -126,7 +126,7 @@ build_script:
     --no-translations
     --release
     --force
-    --qmldir %SRC_DIR%/src/qml
+    --qmldir %RDM_DIR%/src/qml
     rdm.exe
 
   # seems to be useless
@@ -145,7 +145,7 @@ build_script:
   - 7z.exe x python-embedded.zip python37.zip python37.dll
   - rm -f python-embedded.zip
   - md Lib
-  - cp -rf %SRC_DIR%/src/py Lib/site-packages
+  - cp -rf %RDM_DIR%/src/py Lib/site-packages
   - cd Lib/site-packages
   - python -m pip install -r requirements.txt -t .
   - python -m compileall -b .
@@ -159,7 +159,7 @@ build_script:
   - cp -rf %VCREDIST_DIR%/2019/x64/System64/* %RESOURCE_DIR%/
 
   # bundle installer
-  - cd %SRC_DIR%
+  - cd %RDM_DIR%
   - makensis.exe
     /V1
     /DVERSION=%RDM_VERSION%
@@ -170,7 +170,7 @@ build_script:
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z.exe a
     "redis-desktop-manager-%RDM_RELEASE_TAG%.zip"
-    "%SRC_DIR%/build/windows/installer/redis-desktop-manager-%RDM_RELEASE_TAG%.exe"
+    "%RDM_DIR%/build/windows/installer/redis-desktop-manager-%RDM_RELEASE_TAG%.exe"
 
 artifacts:
   - path: redis-desktop-manager-$(RDM_RELEASE_TAG).zip
