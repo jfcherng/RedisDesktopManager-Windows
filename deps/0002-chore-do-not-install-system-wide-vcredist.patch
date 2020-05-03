@@ -1,0 +1,26 @@
+From d77af2778dde28addae4b03d115af104816d0fb9 Mon Sep 17 00:00:00 2001
+From: Jack Cherng <jfcherng@gmail.com>
+Date: Mon, 4 May 2020 00:55:00 +0800
+Subject: [PATCH] chore: do not install system-wide vcredist
+
+Signed-off-by: Jack Cherng <jfcherng@gmail.com>
+---
+ build/windows/installer/installer.nsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/windows/installer/installer.nsi b/build/windows/installer/installer.nsi
+index 10e86140..3877702e 100644
+--- a/build/windows/installer/installer.nsi
++++ b/build/windows/installer/installer.nsi
+@@ -83,7 +83,7 @@ Section -Main SEC0000
+     SetOutPath $INSTDIR    
+     File /r resources\*
+     WriteRegStr HKLM "${REGKEY}\Components" Main 1
+-    !insertmacro InstallVCredist
++    # !insertmacro InstallVCredist
+     BringToFront
+ SectionEnd
+ 
+-- 
+2.26.2.windows.1
+

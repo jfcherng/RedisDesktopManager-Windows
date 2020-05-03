@@ -11,6 +11,7 @@ install:
   # directories
   - set REPO_DIR=%CD%
   - set SRC_DIR=C:\projects\RDM
+  - set VCREDIST_DIR=C:\projects\vcredist
   - set RESOURCE_DIR=%SRC_DIR%\build\windows\installer\resources
   - set OPENSSL_DIR=C:\OpenSSL-Win64
   - set GITBASH_DIR=C:\Program Files\Git\usr\bin
@@ -21,7 +22,7 @@ install:
   - set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
 
   # update all submodules for this repo
-  - git submodule update --init --recursive
+  - git submodule update --init --recursive --depth 1
 
   # clone the RedisDesktopManager repo
   - git clone
@@ -31,12 +32,18 @@ install:
     https://github.com/uglide/RedisDesktopManager.git
     "%SRC_DIR%"
 
+  # clone the vcredist repo
+  - git clone
+    --depth=1
+    https://github.com/jfcherng/vcredist-extracted.git
+    "%VCREDIST_DIR%"
+
   # apply patches to the RedisDesktopManager repo
   - cp -rf %REPO_DIR%/deps/* %SRC_DIR%
 
   - cd %SRC_DIR%
   - git apply -v 0001-patch-rdm-welcome-tab.patch
-  - git apply -v 0002-build-pack-up-vc_redist.x64.exe-into-installer.patch
+  - git apply -v 0002-chore-do-not-install-system-wide-vcredist.patch
   - git apply -v 0003-chore-allow-specifying-detailed-sni-version-info.patch
 
   - cd %SRC_DIR%/3rdparty/qredisclient
@@ -148,20 +155,16 @@ build_script:
   - find . -name __pycache__ -type d -print0 | xargs -0 rm -rf
   - rm -rf py.qrc requirements.txt *.dist-info *.egg-info
 
-  # download Visual C++ Redistributable which will be bundled into the installer
-  - curl -fsSL
-    -o "%RESOURCE_DIR%/vc_redist.x64.exe"
-    "https://aka.ms/vs/16/release/vc_redist.x64.exe"
+  # add Visual C++ Redistributable
+  - cp -rf %VCREDIST_DIR%/2019/x64/System64/* %RESOURCE_DIR%/
 
   # bundle installer
   - cd %SRC_DIR%
-  - call
-    "C:\Program Files (x86)\NSIS\makensis.exe"
+  - makensis.exe
     /V1
     /DVERSION=%RDM_VERSION%
     /DRELEASE_TAG=%RDM_RELEASE_TAG%
     build/windows/installer/installer.nsi
-  - ls -alFh "build/windows/installer"
 
   # create artifacts
   - cd %APPVEYOR_BUILD_FOLDER%
