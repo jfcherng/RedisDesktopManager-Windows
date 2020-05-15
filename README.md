@@ -10,6 +10,9 @@
 如果在條件允許的情況下，衷心地希望購買[訂閱](https://redisdesktop.com/pricing)支持作者，
 在這裡也非常感謝作者開源 [RedisDesktopManager](https://github.com/uglide/RedisDesktopManager) 。
 
+現在，官方 Redis Desktop Manager 也在 Microsoft Store 上架了（一次性付費）：
+[![Chinese Traditional badge](https://developer.microsoft.com/en-us/store/badges/images/Chinese-Traditional_get-it-from-MS.png)](https://www.microsoft.com/store/apps/9NDK76ZVZ3TM?cid=storebadge&ocid=badge)
+
 ## Fork 修改說明
 
 感謝由 [@lework](https://github.com/lework) 所編寫測試的初始版本 `appveyor.yml` 。
