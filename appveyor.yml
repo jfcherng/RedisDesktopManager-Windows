@@ -147,6 +147,7 @@ build_script:
   - md Lib
   - cp -rf %RDM_DIR%/src/py Lib/site-packages
   - cd Lib/site-packages
+  - python -m pip install --upgrade pip wheel
   - python -m pip install -r requirements.txt -t .
   - python -m compileall -b .
   # remove unused files
