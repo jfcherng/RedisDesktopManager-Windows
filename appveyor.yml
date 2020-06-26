@@ -6,7 +6,7 @@ skip_tags: true
 
 install:
   - set RDM_TARGET_BRANCH=2020
-  - set PYTHON_EMBEDDED_VERSION=3.7.7
+  - set PYTHON_EMBEDDED_VERSION=3.8.3
 
   # directories
   - set REPO_DIR=%CD%
@@ -15,7 +15,7 @@ install:
   - set RESOURCE_DIR=%RDM_DIR%\build\windows\installer\resources
   - set OPENSSL_DIR=C:\OpenSSL-Win64
   - set GITBASH_DIR=C:\Program Files\Git\usr\bin
-  - set PY_DIR=C:\Python37-x64
+  - set PY_DIR=C:\Python38-x64
   - set QT_DIR=C:\Qt\5.13\msvc2017_64
 
   # prefer using Linux utils such as "find"
@@ -45,6 +45,7 @@ install:
   - git apply -v 0001-patch-rdm-welcome-tab.patch
   - git apply -v 0002-chore-do-not-install-system-wide-vcredist.patch
   - git apply -v 0003-chore-allow-specifying-detailed-sni-version-info.patch
+  - git apply -v 0004-chore-use-Python-3.8-binding.patch
 
   - cd %RDM_DIR%/3rdparty/qredisclient
   - git apply -v 0001-fix-ssh-header-file-path.patch
@@ -142,7 +143,7 @@ build_script:
   - curl -fsSL
     -o python-embedded.zip
     "https://www.python.org/ftp/python/%PYTHON_EMBEDDED_VERSION%/python-%PYTHON_EMBEDDED_VERSION%-embed-amd64.zip"
-  - 7z.exe x python-embedded.zip python37.zip *.pyd *.dll
+  - 7z.exe x python-embedded.zip python*.zip *.pyd *.dll
   # remove unused files
   - rm -f python-embedded.zip
     python3.dll

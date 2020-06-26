@@ -1,0 +1,54 @@
+From 645c3210223b1132e0a23dc40f138eacbbeb02aa Mon Sep 17 00:00:00 2001
+From: Jack Cherng <jfcherng@gmail.com>
+Date: Sat, 27 Jun 2020 03:03:51 +0800
+Subject: [PATCH] chore: use Python 3.8 binding
+
+Signed-off-by: Jack Cherng <jfcherng@gmail.com>
+---
+ 3rdparty/pyotherside.pri | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/3rdparty/pyotherside.pri b/3rdparty/pyotherside.pri
+index a98930fa..222afe71 100644
+--- a/3rdparty/pyotherside.pri
++++ b/3rdparty/pyotherside.pri
+@@ -1,29 +1,29 @@
+ 
+ # Python
+ win32* {
+-    QMAKE_LIBS += -LC:\Python37-x64\libs -lpython37
+-    INCLUDEPATH += C:\Python37-x64\include\
++    QMAKE_LIBS += -LC:\Python38-x64\libs -lpython38
++    INCLUDEPATH += C:\Python38-x64\include\
+ } else {
+     unix:macx {
+       exists($$PWD/python-3) {
+         message("Using Python from 3rdparty dir")
+-        LIBS += $$PWD/python-3/lib/libpython3.7m.dylib
+-        INCLUDEPATH += $$PWD/python-3/include/python3.7m
++        LIBS += $$PWD/python-3/lib/libpython3.8m.dylib
++        INCLUDEPATH += $$PWD/python-3/include/python3.8m
+ 
+         #deployment
+-        PY_DATA_FILES.files = $$PWD/python-3/lib/libpython3.7m.dylib
++        PY_DATA_FILES.files = $$PWD/python-3/lib/libpython3.8m.dylib
+         PY_DATA_FILES.path = Contents/Frameworks
+         QMAKE_BUNDLE_DATA += PY_DATA_FILES
+ 
+       } else {
+        PYTHON_CONFIG = /usr/local/bin/python3-config
+-       QMAKE_LIBS += $$system($$PYTHON_CONFIG --ldflags --libs)
++       QMAKE_LIBS += $$system($$PYTHON_CONFIG --ldflags --libs --embed)
+        QMAKE_CXXFLAGS += $$system($$PYTHON_CONFIG --includes)
+       }
+     } else {
+       PYTHON_CONFIG = python3-config
+ 
+-      QMAKE_LIBS += $$system($$PYTHON_CONFIG --ldflags --libs)
++      QMAKE_LIBS += $$system($$PYTHON_CONFIG --ldflags --libs --embed)
+       QMAKE_CXXFLAGS += $$system($$PYTHON_CONFIG --includes)
+       DEFINES *= HAVE_DLADDR
+     }
+-- 
+2.26.2.windows.1
+
