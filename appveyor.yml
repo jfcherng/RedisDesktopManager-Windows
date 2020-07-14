@@ -6,7 +6,7 @@ skip_tags: true
 
 install:
   - set RDM_TARGET_BRANCH=2020
-  - set PYTHON_EMBEDDED_VERSION=3.8.3
+  - set PYTHON_EMBEDDED_VERSION=3.8.4
 
   # directories
   - set REPO_DIR=%CD%
