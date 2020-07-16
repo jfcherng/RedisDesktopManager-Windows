@@ -20,13 +20,9 @@
 - 允許使用 SSH Tunneling 功能
 - 取消啟動時的軟體更新檢查
 - 使用 Embedding Python 3.8 版本
+- 使用 Qt 5.14 版本
 - 使用 Visual Studio 2019 編譯
 - 將 Visual C++ Redistributable 打包進安裝檔（而非從網路上下載）
-
-已被上游採用的修改：
-
-- 編譯時自動使用指定版本的 Embedded Python
-- 修復格式化工具 (formatter) 無法使用的問題
 
 ## 安裝使用
 
