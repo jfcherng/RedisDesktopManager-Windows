@@ -16,7 +16,7 @@ install:
   - set OPENSSL_DIR=C:\OpenSSL-Win64
   - set GITBASH_DIR=C:\Program Files\Git\usr\bin
   - set PY_DIR=C:\Python38-x64
-  - set QT_DIR=C:\Qt\5.13\msvc2017_64
+  - set QT_DIR=C:\Qt\5.14\msvc2017_64
 
   # prefer using Linux utils such as "find"
   - set PATH=%GITBASH_DIR%;%PY_DIR%;%QT_DIR%\bin;%PATH%
