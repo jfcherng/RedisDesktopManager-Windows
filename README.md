@@ -18,10 +18,8 @@
 感謝由 [@lework](https://github.com/lework) 所編寫測試的初始版本 `appveyor.yml` 。
 
 - 允許使用 SSH Tunneling 功能
-- 取消啟動時的軟體更新檢查
-- 使用 Embedding Python 3.8 版本
-- 使用 Qt 5.15 版本
-- 使用 Visual Studio 2019 編譯
+- 移除軟體啟動時的更新檢查
+- 更新 Embedding Python 3.8.x 版本
 - 將 Visual C++ Redistributable 打包進安裝檔（而非從網路上下載）
 
 ## 安裝使用
