@@ -1,6 +1,6 @@
-From ac32749ce3692e6d04914266327e6befd5c09f7c Mon Sep 17 00:00:00 2001
+From bf27950ca2e17ba547411e6b151c6dd46c5d652b Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
-Date: Sat, 2 May 2020 23:42:45 +0800
+Date: Wed, 21 Oct 2020 20:03:50 +0800
 Subject: [PATCH] chore: allow specifying detailed version info in the NSI
  script
 
@@ -10,21 +10,21 @@ Signed-off-by: Jack Cherng <jfcherng@gmail.com>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/build/windows/installer/installer.nsi b/build/windows/installer/installer.nsi
-index 10e86140..f31234a1 100644
+index 2b27541c..9b3a6361 100644
 --- a/build/windows/installer/installer.nsi
 +++ b/build/windows/installer/installer.nsi
 @@ -48,17 +48,17 @@ Var StartMenuGroup
  !insertmacro MUI_LANGUAGE English
  
  # Installer attributes
--OutFile redis-desktop-manager-${VERSION}.exe
-+OutFile redis-desktop-manager-${RELEASE_TAG}.exe
- InstallDir $PROGRAMFILES64\RedisDesktopManager
+-OutFile rdm-${VERSION}.exe
++OutFile rdm-${RELEASE_TAG}.exe
+ InstallDir $PROGRAMFILES64\RDM
  CRCCheck on
  XPStyle on
  ShowInstDetails show
  VIProductVersion ${VERSION}.0
- VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName "Redis Desktop Manager"
+ VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName "RDM"
 -VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${VERSION}"
 +VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${RELEASE_TAG}"
  VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyName "${COMPANY}"
@@ -44,5 +44,5 @@ index 10e86140..f31234a1 100644
      WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" URLInfoAbout "${URL}"
      WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayIcon $INSTDIR\uninstall.exe
 -- 
-2.26.2.windows.1
+2.29.0.windows.1
 
