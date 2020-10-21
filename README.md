@@ -27,7 +27,7 @@
 RedisDesktopManager 僅支援 x64 平台。
 
 在本倉庫的 [Releases](https://github.com/jfcherng/RedisDesktopManager-Windows/releases)
-頁面下載 `redis-desktop-manager-XXX.zip` ，解壓縮後安裝 `redis-desktop-manager-XXX.exe` 即可。
+頁面下載 `rdm-XXX.zip` ，解壓縮後安裝 `rdm-XXX.exe` 即可。
 
 ## 參考文件
 

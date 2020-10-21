@@ -187,11 +187,11 @@ build_script:
   # create artifacts
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z.exe a
-    "redis-desktop-manager-%RDM_RELEASE_TAG%.zip"
-    "%RDM_DIR%/build/windows/installer/redis-desktop-manager-%RDM_RELEASE_TAG%.exe"
+    "rdm-%RDM_RELEASE_TAG%.zip"
+    "%RDM_DIR%/build/windows/installer/rdm-%RDM_RELEASE_TAG%.exe"
 
 artifacts:
-  - path: redis-desktop-manager-$(RDM_RELEASE_TAG).zip
+  - path: rdm-$(RDM_RELEASE_TAG).zip
 
 deploy:
   release: $(RDM_RELEASE_TAG)
@@ -199,7 +199,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: s9uw2NujMMtddlR5nLNRnwiTHhHLhuUsPL3w4PLbucCNBS9EQKBXBY4JfuMcUCZL # your encrypted token from GitHub
-  artifact: redis-desktop-manager-$(RDM_RELEASE_TAG).zip # upload all NuGet packages to release assets
+  artifact: rdm-$(RDM_RELEASE_TAG).zip # upload all NuGet packages to release assets
   draft: true
   prerelease: true
   force_update: true
