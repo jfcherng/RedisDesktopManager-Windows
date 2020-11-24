@@ -26,17 +26,17 @@ install:
 
   # clone the RedisDesktopManager repo
   - git clone
-    --depth=1
-    --recursive
-    --branch=%RDM_TARGET_BRANCH%
-    https://github.com/uglide/RedisDesktopManager.git
-    "%RDM_DIR%"
+      --depth=1
+      --recursive
+      --branch=%RDM_TARGET_BRANCH%
+      https://github.com/uglide/RedisDesktopManager.git
+      "%RDM_DIR%"
 
   # clone the vcredist repo
   - git clone
-    --depth=1
-    https://github.com/jfcherng/vcredist-extracted.git
-    "%VCREDIST_DIR%"
+      --depth=1
+      https://github.com/jfcherng/vcredist-extracted.git
+      "%VCREDIST_DIR%"
 
   # apply patches to the RedisDesktopManager repo
   - cp -rf %REPO_DIR%/deps/* %RDM_DIR%
@@ -55,8 +55,8 @@ install:
 
   # enable environment
   - call
-    "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
-    x86_amd64
+      "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
+      x86_amd64
 
   - qmake -v
   - python -VV
@@ -80,19 +80,19 @@ build_script:
   # build libssh2
   - cd %RDM_DIR%/3rdparty/qsshclient/3rdparty/libssh2
   - cmake
-    -G "Visual Studio 16 2019" -A x64
-    -DOPENSSL_ROOT_DIR="%OPENSSL_DIR%"
-    -DCRYPTO_BACKEND=OpenSSL
-    -DCMAKE_BUILD_TYPE=RELEASE
-    -DBUILD_SHARED_LIBS=on
-    -DBUILD_EXAMPLES=off
-    -DBUILD_TESTING=off
-    -DCMAKE_INSTALL_PREFIX=output
-    --build .
+      -G "Visual Studio 16 2019" -A x64
+      -DOPENSSL_ROOT_DIR="%OPENSSL_DIR%"
+      -DCRYPTO_BACKEND=OpenSSL
+      -DCMAKE_BUILD_TYPE=RELEASE
+      -DBUILD_SHARED_LIBS=on
+      -DBUILD_EXAMPLES=off
+      -DBUILD_TESTING=off
+      -DCMAKE_INSTALL_PREFIX=output
+      --build .
   - cmake
-    --build .
-    --config "Release"
-    --target install
+      --build .
+      --config "Release"
+      --target install
   - mkdir build\src\release
   - cp -f output/lib/libssh2.lib %RDM_DIR%/3rdparty/qsshclient/
   - cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
@@ -100,13 +100,13 @@ build_script:
   # build lz4.lib
   - cd %RDM_DIR%/3rdparty/lz4/build/cmake
   - cmake
-    -G "Visual Studio 16 2019" -A x64
-    -DLZ4_BUNDLED_MODE=on
-    -DBUILD_SHARED_LIBS=on
-    --build .
+      -G "Visual Studio 16 2019" -A x64
+      -DLZ4_BUNDLED_MODE=on
+      -DBUILD_SHARED_LIBS=on
+      --build .
   - cmake
-    --build .
-    --config "Release"
+      --build .
+      --config "Release"
 
   # build app
   - cd %RDM_DIR%/3rdparty
@@ -115,15 +115,15 @@ build_script:
   - cd %RDM_DIR%/src
   - lrelease rdm.pro
   - qmake
-    VERSION="%RDM_RELEASE_TAG%"
-    CONFIG+=release
-    CONFIG+=qtquickcompiler
-    DEFINES+="SSH_SUPPORT=1"
-    DEFINES+="RDM_APPSTORE=1"
-    LIBS+="-L%RDM_DIR%/3rdparty/qsshclient"
-    LIBS+="-lqsshclient -llibssh2"
-    INCLUDEPATH+="%RDM_DIR%/3rdparty/qsshclient/src"
-    INCLUDEPATH+="%RDM_DIR%/3rdparty/qsshclient/3rdparty/libssh2/output/include"
+      VERSION="%RDM_RELEASE_TAG%"
+      CONFIG+=release
+      CONFIG+=qtquickcompiler
+      DEFINES+="SSH_SUPPORT=1"
+      DEFINES+="RDM_APPSTORE=1"
+      LIBS+="-L%RDM_DIR%/3rdparty/qsshclient"
+      LIBS+="-lqsshclient -llibssh2"
+      INCLUDEPATH+="%RDM_DIR%/3rdparty/qsshclient/src"
+      INCLUDEPATH+="%RDM_DIR%/3rdparty/qsshclient/3rdparty/libssh2/output/include"
   - nmake /S /NOLOGO release
 
   - cd %RDM_DIR%
@@ -132,34 +132,34 @@ build_script:
   # make rdm.exe Qt-distributable
   - cd %RESOURCE_DIR%
   - windeployqt
-    --no-angle
-    --no-opengl-sw
-    --no-compiler-runtime
-    --no-translations
-    --release
-    --force
-    --qmldir %RDM_DIR%/src/qml
-    rdm.exe
+      --no-angle
+      --no-opengl-sw
+      --no-compiler-runtime
+      --no-translations
+      --release
+      --force
+      --qmldir %RDM_DIR%/src/qml
+      rdm.exe
 
   # seems to be useless
   - rm -rf
-    platforminputcontexts/
-    qmltooling/
-    QtGraphicalEffects/
-    imageformats/qtiff.dll
-    imageformats/qwebp.dll
+      platforminputcontexts/
+      qmltooling/
+      QtGraphicalEffects/
+      imageformats/qtiff.dll
+      imageformats/qwebp.dll
 
   # install python deps
   - cd %RESOURCE_DIR%
   - curl -fsSL
-    -o python-embedded.zip
-    "https://www.python.org/ftp/python/%PYTHON_EMBEDDED_VERSION%/python-%PYTHON_EMBEDDED_VERSION%-embed-amd64.zip"
-  - 7z.exe x python-embedded.zip python*.zip *.pyd *.dll
+      -o python-embedded.zip
+      "https://www.python.org/ftp/python/%PYTHON_EMBEDDED_VERSION%/python-%PYTHON_EMBEDDED_VERSION%-embed-amd64.zip"
+    - 7z.exe x python-embedded.zip python*.zip *.pyd *.dll
   # remove unused files
   - rm -f python-embedded.zip
-    python3.dll
-    libcrypto-1_1.dll libssl-1_1.dll _ssl.pyd
-    sqlite3.dll _sqlite3.pyd
+      python3.dll
+      libcrypto-1_1.dll libssl-1_1.dll _ssl.pyd
+      sqlite3.dll _sqlite3.pyd
 
   - md Lib
   - cp -rf %RDM_DIR%/src/py Lib/site-packages
@@ -179,16 +179,16 @@ build_script:
   # bundle installer
   - cd %RDM_DIR%
   - makensis.exe
-    /V1
-    /DVERSION=%RDM_VERSION%
-    /DRELEASE_TAG=%RDM_RELEASE_TAG%
-    build/windows/installer/installer.nsi
+      /V1
+      /DVERSION=%RDM_VERSION%
+      /DRELEASE_TAG=%RDM_RELEASE_TAG%
+      build/windows/installer/installer.nsi
 
   # create artifacts
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z.exe a
-    "rdm-%RDM_RELEASE_TAG%.zip"
-    "%RDM_DIR%/build/windows/installer/rdm-%RDM_RELEASE_TAG%.exe"
+      "rdm-%RDM_RELEASE_TAG%.zip"
+      "%RDM_DIR%/build/windows/installer/rdm-%RDM_RELEASE_TAG%.exe"
 
 artifacts:
   - path: rdm-$(RDM_RELEASE_TAG).zip
