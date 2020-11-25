@@ -166,6 +166,7 @@ build_script:
   - cd Lib/site-packages
   - python -m pip install --upgrade pip wheel
   - python -m pip install -r requirements.txt -t .
+  - python -m pip list --path .
   - python -m compileall -b .
   # remove unused files
   - find . -name '*.exe' -type f -print0 | xargs -0 rm -f
