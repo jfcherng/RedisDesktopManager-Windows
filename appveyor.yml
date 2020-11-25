@@ -154,7 +154,7 @@ build_script:
   - curl -fsSL
       -o python-embedded.zip
       "https://www.python.org/ftp/python/%PYTHON_EMBEDDED_VERSION%/python-%PYTHON_EMBEDDED_VERSION%-embed-amd64.zip"
-    - 7z.exe x python-embedded.zip python*.zip *.pyd *.dll
+  - 7z.exe x python-embedded.zip python*.zip *.pyd *.dll
   # remove unused files
   - rm -f python-embedded.zip
       python3.dll
