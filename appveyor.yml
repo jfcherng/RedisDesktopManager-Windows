@@ -1,11 +1,11 @@
 # https://www.appveyor.com/docs/windows-images-software/#visual-studio-2019
 image: Visual Studio 2019
-version: 2020.7.{build}
+version: 2021.0.{build}
 clone_depth: 5
 skip_tags: true
 
 install:
-  - set RDM_TARGET_BRANCH=2020
+  - set RDM_TARGET_BRANCH=2021
   - set PYTHON_EMBEDDED_VERSION=3.8.7
 
   # directories
