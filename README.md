@@ -7,7 +7,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/jfcherng/RedisDesktopManager-Windows?style=flat-square&logo=github)](https://github.com/jfcherng/RedisDesktopManager-Windows/stargazers)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&logo=paypal)](https://www.paypal.me/jfcherng/5usd)
 
-RedisDesktopManager 以下（官方）簡稱 RDM 。
+[RedisDesktopManager][rdm@github] 以下（官方）簡稱 RDM 。
 
 ---
 
