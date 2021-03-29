@@ -1,6 +1,6 @@
-From 756330d99499226e79e3643a3f1e317017f41f83 Mon Sep 17 00:00:00 2001
+From 5cdc294a59f48987c368cb535f8e09b75929e0b7 Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
-Date: Mon, 20 Apr 2020 17:08:22 +0800
+Date: Mon, 29 Mar 2021 16:13:39 +0800
 Subject: [PATCH] fix: SSH header file path
 
 Signed-off-by: Jack Cherng <jfcherng@gmail.com>
@@ -9,10 +9,10 @@ Signed-off-by: Jack Cherng <jfcherng@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/qredisclient/connection.cpp b/src/qredisclient/connection.cpp
-index 17c2036..321968a 100644
+index 58522c5..f113d44 100644
 --- a/src/qredisclient/connection.cpp
 +++ b/src/qredisclient/connection.cpp
-@@ -12,7 +12,7 @@
+@@ -13,7 +13,7 @@
  #include "utils/sync.h"
  
  #ifdef SSH_SUPPORT
@@ -22,5 +22,5 @@ index 17c2036..321968a 100644
  
  inline void initResources() { Q_INIT_RESOURCE(lua); }
 -- 
-2.26.1.windows.1
+2.31.1.windows.1
 

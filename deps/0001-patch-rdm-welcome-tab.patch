@@ -1,6 +1,6 @@
-From 3391f2b6b866f56cc08005d50ac72e7e143fdd2c Mon Sep 17 00:00:00 2001
+From d00cd6f9b0190e9cf5e414e4959984a0bb736d56 Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
-Date: Thu, 11 Mar 2021 07:20:12 +0800
+Date: Mon, 29 Mar 2021 15:49:43 +0800
 Subject: [PATCH] chore: patch RDM WelcomeTab for repo information
 
 Signed-off-by: Jack Cherng <jfcherng@gmail.com>
@@ -9,18 +9,18 @@ Signed-off-by: Jack Cherng <jfcherng@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/qml/WelcomeTab.qml b/src/qml/WelcomeTab.qml
-index 87a76aa1..b95c4913 100644
+index 5ead8ba3..4f657c1a 100644
 --- a/src/qml/WelcomeTab.qml
 +++ b/src/qml/WelcomeTab.qml
 @@ -27,7 +27,7 @@ BetterTab {
              ColumnLayout {
                  Layout.fillWidth: true
                  RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size:30px;">RDM.dev - GUI for Redis<sup>®</sup></span>'}
--                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>Version</b> ' + Qt.application.version +'</span>' }
-+                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>Version</b> <a href="https://github.com/jfcherng/RedisDesktopManager-Windows">' + Qt.application.version +'</a> @ <a href="https://github.com/jfcherng">jfcherng</a></span>' }
-                 RichTextWithLinks { Layout.fillWidth: true;  html:  '<span style="font-size: 11px;">Powered by awesome <a href="https://github.com/uglide/RedisDesktopManager/tree/2021/3rdparty">open-source software</a> and '
-                                                                     + '<a href="http://icons8.com/">icons8</a>.</span>'}
+-                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>'+ qsTranslate("RDM","Version") + '</b> ' + Qt.application.version +'</span>' }
++                RichTextWithLinks { Layout.fillWidth: true; html: '<span style="font-size: 13px;"><b>'+ qsTranslate("RDM","Version") + '</b> <a href="https://github.com/jfcherng/RedisDesktopManager-Windows/releases">' + Qt.application.version + '</a> @ <a href="https://github.com/jfcherng">jfcherng</a></span>' }
+                 RichTextWithLinks { Layout.fillWidth: true;  html:  qsTranslate("RDM", '<span style="font-size: 11px;">Powered by awesome <a href="https://github.com/uglide/RedisDesktopManager/tree/2021/3rdparty">open-source software</a> and '
+                                                                     + '<a href="http://icons8.com/">icons8</a>.</span>')}
              }
 -- 
-2.31.0.rc2.windows.1
+2.31.1.windows.1
 
