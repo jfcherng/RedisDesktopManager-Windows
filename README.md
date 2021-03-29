@@ -23,7 +23,6 @@
 本倉庫在其基礎上進行以下改動：
 
 - 允許使用 SSH Tunneling 功能
-- 移除打開軟體時的更新檢查
 - Embedded Python 使用 3.8.x 版本
 - 將 Visual C++ Redistributable 打包進安裝檔（而非從網路上下載）
 
