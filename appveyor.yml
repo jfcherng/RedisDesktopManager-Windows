@@ -60,6 +60,7 @@ install:
 
   - qmake -v
   - python -VV
+  - cmake --version
 
 before_build:
   - cd %RDM_DIR%
