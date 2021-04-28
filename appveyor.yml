@@ -13,7 +13,7 @@ install:
   - set RDM_DIR=C:\projects\RDM
   - set VCREDIST_DIR=C:\projects\vcredist
   - set RESOURCE_DIR=%RDM_DIR%\build\windows\installer\resources
-  - set OPENSSL_DIR=C:\OpenSSL-Win64
+  - set OPENSSL_DIR=C:\OpenSSL-v111-Win64
   - set GITBASH_DIR=C:\Program Files\Git\usr\bin
   - set PY_DIR=C:\Python38-x64
   - set QT_DIR=C:\Qt\5.15\msvc2019_64
