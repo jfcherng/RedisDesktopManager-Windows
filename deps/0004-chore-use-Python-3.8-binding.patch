@@ -1,40 +1,27 @@
-From be1b89ded69fbdb9630bb64131936abc42ec35e0 Mon Sep 17 00:00:00 2001
+From 7050b33695e7cd2d4c6e142aaea2bcce1ee36393 Mon Sep 17 00:00:00 2001
 From: Jack Cherng <jfcherng@gmail.com>
-Date: Fri, 11 Sep 2020 16:00:05 +0800
-Subject: [PATCH] [PATCH] chore: use Python 3.8 binding
+Date: Sat, 5 Jun 2021 07:11:17 +0800
+Subject: [PATCH] feat: use Python 3.8 (supports Windows 7)
 
 Signed-off-by: Jack Cherng <jfcherng@gmail.com>
 ---
- 3rdparty/pyotherside.pri | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ 3rdparty/pyotherside.pri | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/3rdparty/pyotherside.pri b/3rdparty/pyotherside.pri
-index a9b64ddf..78fbca97 100644
+index 8e91add2..7704d402 100644
 --- a/3rdparty/pyotherside.pri
 +++ b/3rdparty/pyotherside.pri
-@@ -1,17 +1,17 @@
+@@ -1,7 +1,7 @@
  
  # Python
+-PY_VERSION="39"
+-PY_LIB_SUFFIX="3.9"
++PY_VERSION="38"
++PY_LIB_SUFFIX="3.8"
+ 
  win32* {
--    QMAKE_LIBS += -LC:\Python37-x64\libs -lpython37
--    INCLUDEPATH += C:\Python37-x64\include\
-+    QMAKE_LIBS += -LC:\Python38-x64\libs -lpython38
-+    INCLUDEPATH += C:\Python38-x64\include\
- } else {
-     unix:macx {
-       exists($$PWD/python-3) {
-         message("Using Python from 3rdparty dir")
--        LIBS += $$PWD/python-3/lib/libpython3.7m.dylib
--        INCLUDEPATH += $$PWD/python-3/include/python3.7m
-+        LIBS += $$PWD/python-3/lib/libpython3.8m.dylib
-+        INCLUDEPATH += $$PWD/python-3/include/python3.8m
- 
-         #deployment
--        PY_DATA_FILES.files = $$PWD/python-3/lib/libpython3.7m.dylib
-+        PY_DATA_FILES.files = $$PWD/python-3/lib/libpython3.8m.dylib
-         PY_DATA_FILES.path = Contents/Frameworks
-         QMAKE_BUNDLE_DATA += PY_DATA_FILES
- 
+     QMAKE_LIBS += -LC:\Python$${PY_VERSION}-x64\libs -lpython$${PY_VERSION}
 -- 
-2.28.0.windows.1
+2.31.1.windows.1
 
