@@ -1,6 +1,6 @@
 # https://www.appveyor.com/docs/windows-images-software/#visual-studio-2019
 image: Visual Studio 2019
-version: 2021.4.{build}
+version: 2021.5.{build}
 clone_depth: 5
 skip_tags: true
 
