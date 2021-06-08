@@ -95,6 +95,7 @@ build_script:
   - mkdir build\src\release
   - cp -f output/lib/libssh2.lib %RDM_DIR%/3rdparty/qsshclient/
   - cp -f output/bin/libssh2.dll %RESOURCE_DIR%/
+  - cp -f "%OPENSSL_DIR%/libcrypto-1_1-x64.dll" %RESOURCE_DIR%/
 
   # build lz4.lib
   - cd %RDM_DIR%/3rdparty/lz4/build/cmake
