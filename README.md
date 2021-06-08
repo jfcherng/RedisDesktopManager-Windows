@@ -23,7 +23,6 @@
 本倉庫在其基礎上進行以下改動：
 
 - 允許使用 SSH Tunneling 功能
-- 使用 Embedded Python 3.8 以繼續支援 Windows 7
 - 將 Visual C++ Redistributable 打包進安裝檔（而非從網路上下載）
 
 ## 安裝使用

@@ -45,7 +45,6 @@ install:
   - git apply -v 0001-patch-rdm-welcome-tab.patch
   - git apply -v 0002-chore-do-not-install-system-wide-vcredist.patch
   - git apply -v 0003-chore-allow-specifying-detailed-sni-version-info.patch
-  - git apply -v 0004-chore-use-Python-3.8-binding.patch
 
   - cd %RDM_DIR%/3rdparty/qredisclient
   - git apply -v 0001-fix-ssh-header-file-path.patch
