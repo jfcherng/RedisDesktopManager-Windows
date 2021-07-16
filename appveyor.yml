@@ -173,7 +173,7 @@ build_script:
   - rm -rf py.qrc requirements.txt *.dist-info *.egg-info
 
   # add Visual C++ Redistributable
-  - cp -rf %VCREDIST_DIR%/2019/x64/System64/* %RESOURCE_DIR%/
+  - cp -rf %VCREDIST_DIR%/2022/x64/System64/* %RESOURCE_DIR%/
 
   # bundle installer
   - cd %RDM_DIR%
